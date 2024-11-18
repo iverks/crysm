@@ -21,7 +21,7 @@ uv sync
 Hvis du nekter å installere `uv` mener jeg det skal være mulig å installere dependencies med
 
 ```bash
-pip install .
+pip install -e .
 ```
 
 men hvorfor være så vrang.
