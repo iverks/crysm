@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import csv
 
 import matplotlib.pyplot as plt
@@ -41,7 +42,7 @@ def main():
         [int(f.stem) for f in (cur_dir / f"tiff{corrected}").glob("*.tiff")]
     )
     image_number = 75
-    delta = 1
+    delta = highest_image_number // 80
 
     fig = plt.figure()
     ax = fig.add_subplot()

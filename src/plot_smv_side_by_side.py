@@ -1,8 +1,5 @@
-import csv
-from pathlib import Path
-
+#!/usr/bin/env python3
 import matplotlib.pyplot as plt
-import numpy as np
 from matplotlib.widgets import Slider
 
 import find_cred_project

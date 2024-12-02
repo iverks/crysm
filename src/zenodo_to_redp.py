@@ -1,5 +1,5 @@
+#!/usr/bin/env python3
 import textwrap
-from collections import namedtuple
 from dataclasses import dataclass
 from pathlib import Path
 
