@@ -1,7 +1,4 @@
-from pathlib import Path
-
-import matplotlib.pyplot as plt
-import numpy as np
+#!/usr/bin/env python3
 import tifffile as tf
 
 import find_cred_project
