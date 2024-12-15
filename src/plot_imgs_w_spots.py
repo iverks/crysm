@@ -21,7 +21,7 @@ def peek(iterator: Generator[T, None, None]) -> tuple[T, Generator[T, None, None
 
 def main():
     cur_dir = find_cred_project.find_cred_project()
-    view_corrected = True
+    view_corrected = False
 
     # cur_dir = Path("/home/iverks/progging/master/zenodo/mordenite_cRED_1")
     # view_corrected = False
@@ -31,7 +31,6 @@ def main():
 
     with integrate.open() as rf:
         # Sometimes 'iseg' is here, sometimes not
-        # TODO: check how many rows and add or rm 'iseg' dynamically
         line_iter = (line for line in rf if not line.startswith("!"))
         first_line, line_iter = peek(line_iter)
         if len(first_line.strip().split(" ")) == 7:
@@ -155,6 +154,13 @@ def main():
     delta_slider.on_changed(update)
 
     plt.show()
+    fig.savefig(
+        cur_dir
+        / f"img_w_spots_{int(i_num_slider.val)}_delta_{int(delta_slider.val)}.png",
+        dpi=600,
+        pad_inches=0,
+        bbox_inches=None,
+    )
 
 
 if __name__ == "__main__":
