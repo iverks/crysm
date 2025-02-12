@@ -1,5 +1,10 @@
 # Masterarbeidet mitt
 
+Uhh jeg har ingen anelse hvordan man kan gjøre pakken brukbar for andre. For øyeblikket har jeg lagt src-mappen til path og kaller på filene som om de var shell scripts.
+
+
+## Resten
+
 Jeg bruker `uv` til package management. For å installere 
 
 ```bash

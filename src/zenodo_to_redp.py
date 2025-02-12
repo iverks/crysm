@@ -1,9 +1,9 @@
+#!/usr/bin/env python3
 import textwrap
-from collections import namedtuple
 from dataclasses import dataclass
 from pathlib import Path
 
-zpath = Path("/home/iverks/progging/master/zenodo/mordenite_cRED_1")
+zpath = Path("/home/iverks/progging/master/zenodo/mordenite_cRED_2")
 
 
 @dataclass

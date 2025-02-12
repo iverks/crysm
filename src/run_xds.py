@@ -1,13 +1,13 @@
+#!/usr/bin/env python3
 import datetime
 import os
 import pathlib
-import shutil
 import subprocess
 import tempfile
-import tomllib
 from textwrap import dedent
 from typing import Annotated
 
+import tomllib
 import typer
 from pydantic import BaseModel
 
