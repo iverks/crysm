@@ -2,9 +2,7 @@
 import re
 import subprocess
 
-import edtools
-
-import find_cred_project
+import lib.find_cred_project as find_cred_project
 
 # Assumption for now
 composition = "Si48 O96"

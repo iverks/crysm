@@ -7,7 +7,7 @@ import numpy as np
 import tifffile
 from matplotlib.widgets import Slider
 
-from adscimage import read_adsc
+from lib.adscimage import read_adsc
 
 cur_dir = Path(__file__).parent
 

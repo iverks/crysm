@@ -5,7 +5,7 @@ import numpy as np
 import tifffile
 import trackpy as tp
 
-import find_cred_project
+import lib.find_cred_project as find_cred_project
 
 
 def main():

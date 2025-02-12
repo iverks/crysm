@@ -4,7 +4,7 @@ import numpy as np
 import tifffile
 from matplotlib.widgets import Slider
 
-import find_cred_project
+import lib.find_cred_project as find_cred_project
 
 
 def main():

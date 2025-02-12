@@ -5,28 +5,40 @@ Uhh jeg har ingen anelse hvordan man kan gjøre pakken brukbar for andre. For ø
 
 ## Resten
 
-Jeg bruker `uv` til package management. For å installere 
+Jeg bruker `uv` til package management. For å installere på linux/mac
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-eller 
+eller på windows
 
 ```ps1
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-For å installere dependencies
+For å installere pakken kjører du 
 
 ```bash
-uv sync
+uv tool install -e .
 ```
 
-Hvis du nekter å installere `uv` mener jeg det skal være mulig å installere dependencies med
+Pakken har flere scripts, listet under [project.scripts] i [`pyproject.toml`](./pyproject.toml). De kjøres med 
 
 ```bash
-pip install -e .
+uv run <script>
 ```
 
-men hvorfor være så vrang.
+Før eller siden skal alle helst være tilgjengelige via 
+
+```bash
+uv run crysm --help
+```
+
+### Reinstall
+
+Om du legger til et ekstra script i pakken må du reinstallere den ved å kjøre
+
+```bash
+uv tool uninstall crysm; uv tool install -e .
+```

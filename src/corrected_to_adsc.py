@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import tifffile as tf
 
-import find_cred_project
-from adscimage import read_adsc, write_adsc
+import lib.find_cred_project as find_cred_project
+from lib.adscimage import read_adsc, write_adsc
 
 
 def main():

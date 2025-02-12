@@ -5,7 +5,7 @@ import re
 import matplotlib.pyplot as plt
 import numpy as np
 
-import find_cred_project
+import lib.find_cred_project as find_cred_project
 
 
 def main():

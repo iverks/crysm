@@ -2,8 +2,8 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
-import find_cred_project
-from adscimage import read_adsc
+import lib.find_cred_project as find_cred_project
+from lib.adscimage import read_adsc
 
 
 def main():

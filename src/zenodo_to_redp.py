@@ -3,7 +3,7 @@ import textwrap
 from dataclasses import dataclass
 from pathlib import Path
 
-zpath = Path("/home/iverks/progging/master/zenodo/mordenite_cRED_2")
+from lib.find_cred_project import find_cred_project
 
 
 @dataclass
@@ -142,13 +142,18 @@ def serialize_redp(redp: REDp) -> str:
     return redp_str
 
 
-def zenodo_to_redp():
+def main():
+    zpath = find_cred_project()
+
+    print("Parsing ", zpath / "cRED_log.txt")
     cred_log = parse_cred_log(zpath / "cRED_log.txt")
+    print("Parsing ", zpath / "tiff/pets.pts")
     pets = parse_pets(zpath / "tiff/pets.pts")
     redp = pets_to_redp(pets)
     with open(zpath / "tiff/redp.ed3d", "w") as wf:
+        print("Writing to", wf.name)
         wf.write(serialize_redp(redp))
 
 
 if __name__ == "__main__":
-    zenodo_to_redp()
+    main()

@@ -1,5 +1,5 @@
 [project]
-name = "cred"
+name = "crysm"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -10,8 +10,10 @@ dependencies = [
     "hyperspy>=2.1.1",
     "numba>=0.58.1",
     "orix>=0.13.0",
+    "plotly>=6.0.0",
     "pydantic>=2.9.2",
     "pyparsing>=3.1.4",
+    "pyqt6>=6.7.1",
     "pyxem>=0.19.1",
     "setuptools>=75.3.0",
     "siphash24>=1.7",
@@ -20,7 +22,10 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = [
-    "ipympl>=0.9.3",
-    "jupyter>=1.1.1",
-]
+dev = ["ipympl>=0.9.3", "jupyter>=1.1.1"]
+
+[project.scripts]
+crysm = "main:app"
+plot-integrate = "plot_integrate:main"
+plot-spot = "plot_spot:main"
+zenodo-to-redp = "zenodo_to_redp:main"
