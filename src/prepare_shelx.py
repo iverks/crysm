@@ -5,7 +5,7 @@ import subprocess
 import lib.find_cred_project as find_cred_project
 
 # Assumption for now
-composition = "Si48 O96"
+composition = "Si1 O2"
 
 xdsconv_template = """\
 ! UNIT_CELL_CONSTANTS= {constraints}
@@ -18,20 +18,12 @@ OUTPUT_FILE={out_file} SHELX
 FRIEDEL'S_LAW=FALSE ! store anomalous signal in output file even if weak
 """
 
-# Note that we assume constraints are same format in xds.inp
-# this is correct but bad, todo fix
-ins_template = """\
-TITL {space_group}
-CELL {wavelength} {constraints}
-ZERR 1.00 0.000 0.000 0.000 0.000 0.000 0.000
-"""  # TODO: REST OF FILE
-
 
 def main():
     cur_dir = find_cred_project.find_cred_project()
     smv_dir = cur_dir / "SMV"
     shelx_dir = cur_dir / "shelx"
-    xds_inp = (smv_dir / "XDS.INP").read_text()
+    xds_inp = (smv_dir / "INTEGRATE.LP").read_text()
     xds_inp = "\n".join([line.split("!")[0] for line in xds_inp.splitlines()])
     cell_consts: str = re.findall("UNIT_CELL_CONSTANTS=(.*)", xds_inp)[0]
     space_group: str = re.findall("SPACE_GROUP_NUMBER=(.*)", xds_inp)[0]
