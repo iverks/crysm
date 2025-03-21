@@ -6,9 +6,12 @@ import matplotlib.pyplot as plt
 
 from lib.find_cred_project import find_cred_project
 
-HKLLine = NamedTuple(
-    "HKLLine", [("h", int), ("k", int), ("l", int), ("intensity", float)]
-)
+
+class HKLLine(NamedTuple):
+    h: int
+    k: int
+    l: int  # noqa: E741
+    intensity: float
 
 
 def hkl_equal(a: HKLLine, b: HKLLine):
@@ -77,6 +80,7 @@ def plot_diffs(diffs: list[float], different_sign: list[bool], magnitudes: list[
     plt.show()
     plt.close()
 
+
 def plot_hkl_file(filename: str | Path | None):
     if type(filename) is Path:
         toparse = filename
@@ -95,8 +99,7 @@ def plot_hkl_file(filename: str | Path | None):
     plt.show()
 
 
-
-def main(save = True):
+def main(save=True):
     cur_dir = find_cred_project()
 
     pets_file = find_pets_hkl(cur_dir)
