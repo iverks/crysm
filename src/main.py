@@ -1,8 +1,7 @@
+from pathlib import Path
 from typer import Typer
 
-import compare_hkl as mod_compare_hkl
-import pets
-import pets.calibrate_angles
+
 
 app = Typer(name="crysm", no_args_is_help=True)
 
@@ -14,8 +13,10 @@ def main():
 
 
 @app.command()
-def pets_calibrate_angles():
-    pets.calibrate_angles.calibrate_angles()
+def pets_calibrate_angles(skip: bool = False):
+    import pets
+    import pets.calibrate_angles
+    pets.calibrate_angles.calibrate_angles(skip_after_defocus=skip)
 
 
 @app.command()
@@ -34,8 +35,13 @@ def debug():
 
 @app.command()
 def compare_hkl():
+    import compare_hkl as mod_compare_hkl
     mod_compare_hkl.main()
 
+@app.command()
+def plot_hkl(filename: Path | None = None):
+    import compare_hkl as mod_compare_hkl
+    mod_compare_hkl.plot_hkl_file(filename)
 
 if __name__ == "__main__":
     app()

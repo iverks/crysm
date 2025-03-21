@@ -49,7 +49,7 @@ def get_stats_for_folder(dataset: Path):
     return DatasetStat(start_times[0], end_times[-1], end_times, names)
 
 
-def calibrate_angles():
+def calibrate_angles(skip_after_defocus: bool = False):
     cur_dir = find_cred_project()
     cred_log = (cur_dir / "cRED_log.txt").read_text(errors="ignore")
     start_angle = float(cred_log.split("Starting angle: ")[1].split(" degrees")[0])
@@ -63,13 +63,22 @@ def calibrate_angles():
     stats = get_stats_for_folder(cur_dir / "tiff")
     total_time = stats.end - stats.start
 
-    with open(cur_dir / "pets-fromtime.pts", "w") as petsout:
+    prev_name = 0
+    filename = "pets-fromtime.pts"
+    if skip_after_defocus:
+        filename = "pets-skipframe.pts"
+    with open(cur_dir / filename, "w") as petsout:
         petsout.write(rest)
         petsout.write("imagelist\n")
 
         for name, time in zip(stats.names, stats.end_times):
+            if skip_after_defocus and name - 1 > prev_name:
+                prev_name = name
+                continue
+            prev_name = name
             timefraction = (time - stats.start) / total_time
             angle = start_angle + total_angle * timefraction
             petsout.write(f"tiff/{name:05d}.tiff   {angle:.4f} {0.0:.2f}\n")
 
         petsout.write("endimagelist\n\n")
+    print(f"Wrote image list to {filename}")

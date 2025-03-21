@@ -77,9 +77,26 @@ def plot_diffs(diffs: list[float], different_sign: list[bool], magnitudes: list[
     plt.show()
     plt.close()
 
+def plot_hkl_file(filename: str | Path | None):
+    if type(filename) is Path:
+        toparse = filename
+    else:
+        cur_dir = find_cred_project()
+        if filename is None:
+            filename = "pets.hkl"
+        toparse = cur_dir / filename
 
-def main():
-    save = True
+    hkldata = parse_pets_hkl(toparse)
+    hkldata.sort(key=lambda line: line.intensity)
+
+    intensities = [line.intensity for line in hkldata]
+    plt.plot(intensities)
+    plt.yscale("symlog")
+    plt.show()
+
+
+
+def main(save = True):
     cur_dir = find_cred_project()
 
     pets_file = find_pets_hkl(cur_dir)
