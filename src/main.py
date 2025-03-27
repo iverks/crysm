@@ -16,7 +16,7 @@ def main():
 
 @app.command()
 def pets_calibrate_angles(
-    range: Annotated[float, typer.Option(help="Estimaged percentage of total angle range really spanned")] = True,
+    range: Annotated[float, typer.Option(help="Estimaged percentage of total angle range really spanned")] = 100,
     skip: Annotated[bool, typer.Option(help="Skip first frame after defocus")] = False,
 ):  # noqa: F821
     import pets
