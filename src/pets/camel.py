@@ -49,8 +49,8 @@ def parse_camel(file: Path) -> list[CamelLine]:
 
 def plot_camel(data: CamelData):
     nplots = len(data.shells)
-    _fig, axs = plt.subplots(nplots)
-    for shell, ax in zip(data.shells, axs):
+    _fig, axs = plt.subplots(nplots, sharex=True)
+    for shell, ax in zip(sorted(data.shells, reverse=True), axs):
         exc = data.excitations[shell]
         rcd = data.rcs[shell]
         ax.plot(exc, [rc + shell for rc in rcd])
