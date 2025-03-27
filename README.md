@@ -1,44 +1,25 @@
-# Masterarbeidet mitt
+# CRYSM
 
-Uhh jeg har ingen anelse hvordan man kan gjøre pakken brukbar for andre. For øyeblikket har jeg lagt src-mappen til path og kaller på filene som om de var shell scripts.
+## Installation
 
-
-## Resten
-
-Jeg bruker `uv` til package management. For å installere på linux/mac
-
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-eller på windows
-
-```ps1
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-```
-
-For å installere pakken kjører du 
+In order to install the package, run 
 
 ```bash
 uv tool install -e .
 ```
 
-Pakken har flere scripts, listet under [project.scripts] i [`pyproject.toml`](./pyproject.toml). De kjøres med 
+This exposes the `crysm` command. To see available commands, run `crysm --help`. The commands correspond to the decorated functions in `src/main.py`.
+
+## Installation of uv
+
+In this package, `uv` is used for package management. To install on linux/mac, run
 
 ```bash
-uv run <script>
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-Før eller siden skal alle helst være tilgjengelige via 
+and on windows (in powershell)
 
-```bash
-uv run crysm --help
-```
-
-### Reinstall
-
-Om du legger til et ekstra script i pakken må du reinstallere den ved å kjøre
-
-```bash
-uv tool uninstall crysm; uv tool install -e .
+```ps1
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
