@@ -18,7 +18,14 @@ from lib.find_cred_project import find_cred_project
 def get_timings(image: Path):
     with tf.TiffFile(image) as img:
         page: tf.TiffPage = img.pages[0]
-        metadata = yaml.load(page.tags["ImageDescription"].value, Loader=yaml.Loader)
+        header: str = page.tags["ImageDescription"].value
+        lines = [
+            line
+            for line in header.splitlines()
+            if line.startswith("ImageGetTimeStart")
+            or line.startswith("ImageGetTimeEnd")
+        ]
+        metadata = yaml.load("\n".join(lines), Loader=yaml.Loader)
         start = float(metadata["ImageGetTimeStart"])
         end = float(metadata["ImageGetTimeEnd"])
     return start, end
@@ -49,13 +56,19 @@ def get_stats_for_folder(dataset: Path):
     return DatasetStat(start_times[0], end_times[-1], end_times, names)
 
 
-def calibrate_angles(skip_after_defocus: bool = False):
+def calibrate_angles(percentage: float = 100, skip_after_defocus: bool = False):
     cur_dir = find_cred_project()
     cred_log = (cur_dir / "cRED_log.txt").read_text(errors="ignore")
     start_angle = float(cred_log.split("Starting angle: ")[1].split(" degrees")[0])
     end_angle = float(cred_log.split("Ending angle: ")[1].split(" degrees")[0])
     print(f"Parsed angles as {start_angle} to {end_angle}")
+        
     total_angle = end_angle - start_angle
+    if percentage != 100:
+        old_total_angle = total_angle
+        total_angle *= percentage / 100
+        print(f"Reduced angle span from {old_total_angle:.1f} to {total_angle:.1f} degrees")
+
 
     pets = (cur_dir / "pets.pts").read_text(errors="ignore")
     rest = pets.split("imagelist")[0]
@@ -63,10 +76,14 @@ def calibrate_angles(skip_after_defocus: bool = False):
     stats = get_stats_for_folder(cur_dir / "tiff")
     total_time = stats.end - stats.start
 
+    if percentage == 100:
+        perc = "pets"
+    else:
+        perc = f"{percentage}"
     prev_name = 0
-    filename = "pets-fromtime.pts"
+    filename = f"{perc}-fromtime.pts"
     if skip_after_defocus:
-        filename = "pets-skipframe.pts"
+        filename = f"{perc}-skipframe.pts"
     with open(cur_dir / filename, "w") as petsout:
         petsout.write(rest)
         petsout.write("imagelist\n")
