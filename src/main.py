@@ -7,12 +7,6 @@ from typer import Typer
 app = Typer(name="crysm", no_args_is_help=True)
 
 
-def main():
-    """Alias for uv"""
-    print("Still using main instead of app")
-    app()
-
-
 @app.command(
     help="Calibrate the angle of each image based on the timestamps in their metadata"
 )
@@ -29,18 +23,24 @@ def pets_calibrate_angles(
     pets.calibrate_angles.calibrate_angles(percentage=range, skip_after_defocus=skip)
 
 
-@app.command()
-def debug():
-    from pathlib import Path
+@app.command(
+    help="Print lines to add to XDS.INP to correct the rotation axis and detector distance"
+)
+def xds_calibrate(
+    pixel_size: Annotated[
+        float,
+        typer.Option(
+            help="Calibrated pixel size, depends on camera length. Suggested values: 120cm -> 0.00947, 150cm -> 0.007929, 200cm -> 0.006167"
+        ),
+    ] = 0.007929,
+    rotation_axis: Annotated[
+        float,
+        typer.Option(help="Rotation axis in degrees. Default 231 degrees."),
+    ] = 231,
+):
+    import xds.calibrate
 
-    import orix.crystal_map
-
-    cur_dir = Path(__file__).parent.parent
-    phase = orix.crystal_map.Phase.from_cif(cur_dir / "mor.cif")
-
-    print(phase.a_axis.length)
-    print(phase.b_axis.length)
-    print(phase.c_axis.length)
+    xds.calibrate.calibrate(rotation_axis=rotation_axis, pixel_size=pixel_size)
 
 
 @app.command(help="Compare the indexed reflections in SMV/INTEGRATE.HKL and pets.hkl")
@@ -50,15 +50,15 @@ def compare_hkl():
     mod_compare_hkl.main()
 
 
-@app.command()
+@app.command(help="Plot the distribution of indexed peaks in a pets .hkl-file")
 def plot_hkl(filename: Path | None = None):
     import compare_hkl as mod_compare_hkl
 
     mod_compare_hkl.plot_hkl_file(filename)
 
 
-@app.command()
-def plot_camel(filename: Path):
+@app.command(help="Plot the rocking curve from a .cml-file")
+def plot_camel(filename: Annotated[Path, typer.Argument(help="The .cml file to plot")]):
     from matplotlib import pyplot as plt
 
     from pets.camel import parse_camel, plot_camel
