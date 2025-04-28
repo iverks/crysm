@@ -43,7 +43,7 @@ def jitted_image_correct(
     out_img[post_gap - smear : post_gap, post_gap - smear : post_gap] = (
         img[256, 256] / correction_factor
     )
-    return out_img
+    return out_img.astype(np.uint32)
 
 
 def correct_center_cross_image(
