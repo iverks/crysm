@@ -1,9 +1,11 @@
+import time
+from functools import lru_cache
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import tifffile as tf
 from matplotlib.axes import Axes
-from matplotlib.backend_bases import MouseButton, MouseEvent
+from matplotlib.backend_bases import KeyEvent, MouseButton, MouseEvent
 from matplotlib.patches import Rectangle
 
 
@@ -15,15 +17,24 @@ def parse_dead_pixels(dead_pixels: Path) -> list[tuple[int, int]]:
     return out
 
 
+@lru_cache
+def load_image(image: Path):
+    return tf.imread(image)
+
+
 def mark_dead_pixels(image: Path, dead_pixels_path: Path | None = None):
     dead_pixels = (
         parse_dead_pixels(dead_pixels_path) if dead_pixels_path is not None else []
     )
-    img = tf.imread(image)
+    # List cosplaying as a pointer
+    cur_image = [image]
+    other_images = sorted(list(image.parent.iterdir()))
     fig, _ax = plt.subplots()
     ax: Axes = _ax
-    ax.imshow(img, norm="log")
+    bg = ax.imshow(load_image(image), norm="symlog")
     rects: dict[tuple[int, int], Rectangle] = {}
+
+    title = "Double click to toggle dead pixels\n Use 'a' and 'd' to check other images\n Image {image}"
     for px, py in dead_pixels:
         # subtract 1 to correct for 1-indexing, and 0.5 because we draw from the center
         rect = Rectangle(
@@ -35,6 +46,18 @@ def mark_dead_pixels(image: Path, dead_pixels_path: Path | None = None):
             alpha=1,
         )
         rects[px, py] = ax.add_patch(rect)
+
+    def on_keydown(event: KeyEvent):
+        if event.key == "d" or event.key == "a":
+            image_idx = other_images.index(cur_image[0])
+            if event.key == "d":
+                next_idx = (image_idx + 1) % len(other_images)
+            else:
+                next_idx = (image_idx - 1) % len(other_images)
+            cur_image[0] = other_images[next_idx]
+            bg.set_data(load_image(cur_image[0]))
+            plt.title(title.format(image=cur_image[0]))
+            plt.draw()
 
     def on_click(event: MouseEvent):
         if event.button is MouseButton.LEFT and event.dblclick:
@@ -53,14 +76,18 @@ def mark_dead_pixels(image: Path, dead_pixels_path: Path | None = None):
             else:
                 rect = rects.pop((px, py))
                 rect.remove()
-            ax.redraw_in_frame()
+            plt.draw()
 
+    plt.connect("key_press_event", on_keydown)
     plt.connect("button_press_event", on_click)
-    plt.title("Double click to toggle dead pixels")
+    plt.title(title.format(image=cur_image[0]))
     plt.show()
 
     dead_pixels = list(rects.keys())
 
+    if dead_pixels_path is None:
+        dead_pixels_path = Path("__deadpixels.txt")
     with dead_pixels_path.open("w") as dp:
         for px, py in dead_pixels:
-            dp.write(f"{px} {py}")
+            dp.write(f"{px} {py}\n")
+    print(f"Wrote {len(dead_pixels)} to {dead_pixels_path}")
