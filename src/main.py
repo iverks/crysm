@@ -23,6 +23,64 @@ def pets_calibrate_angles(
     pets.calibrate_angles.calibrate_angles(percentage=range, skip_after_defocus=skip)
 
 
+@app.command()
+def find_center_cross_correction(flatfield_image: Path):
+    """Find central cross intensity correction factor from a flatfield image"""
+    import lib
+    import lib.central_cross_correction_factor
+
+    lib.central_cross_correction_factor.find_center_cross_correction(flatfield_image)
+
+
+@app.command()
+def pets_correct_center_cross(
+    correction_factor: Annotated[
+        float,
+        typer.Option(
+            help="How much more intense a center cross pixel is than a regular pixel"
+        ),
+    ],
+    additional_pixels: Annotated[
+        int,
+        typer.Option(
+            help="How many pixels should be added to the"
+            "center to correct the geometry of the images."
+        ),
+    ],
+):
+    """
+    Correct central cross of a dataset given the intensity
+    correction factor and the number of pixels in the gap
+    """
+    from lib import find_cred_project
+    from pets import center_cross_correction
+
+    cur_dir = find_cred_project.find_cred_project()
+    center_cross_correction.correct_center_cross(
+        cur_dir, correction_factor, additional_pixels
+    )
+
+
+@app.command()
+def pets_mark_dead_pixels(
+    image: Annotated[
+        Path, typer.Argument(help="Image to look at to find the dead pixels")
+    ],
+    dead_pixels: Annotated[
+        Path | None,
+        typer.Option(
+            ...,
+            "--dead-pixels",
+            "-d",
+            help="PETS generated file of initial dead pixels",
+        ),
+    ] = None,
+):
+    from pets import mark_dead_pixels
+
+    mark_dead_pixels.mark_dead_pixels(image, dead_pixels)
+
+
 @app.command(
     help="Print lines to add to XDS.INP to correct the rotation axis and detector distance"
 )
@@ -30,7 +88,8 @@ def xds_calibrate(
     pixel_size: Annotated[
         float,
         typer.Option(
-            help="Calibrated pixel size, depends on camera length. Suggested values: 120cm -> 0.00947, 150cm -> 0.007929, 200cm -> 0.006167"
+            help="Calibrated pixel size, depends on camera length."
+            "Suggested values: 120cm -> 0.00947, 150cm -> 0.007929, 200cm -> 0.006167"
         ),
     ] = 0.007929,
     rotation_axis: Annotated[
