@@ -1,6 +1,8 @@
+import enum
 from pathlib import Path
 from typing import Annotated
 
+import rich
 import typer
 from typer import Typer
 
@@ -25,7 +27,8 @@ def pets_calibrate_angles(
 
 @app.command()
 def find_center_cross_correction(flatfield_image: Path):
-    """Find central cross intensity correction factor from a flatfield image"""
+    """Find central cross intensity correction factor from a flatfield image.
+    Supported formats are .tiff or .mib"""
     import lib
     import lib.central_cross_correction_factor
 
@@ -34,17 +37,23 @@ def find_center_cross_correction(flatfield_image: Path):
 
 @app.command()
 def pets_correct_center_cross(
+    additional_pixels: Annotated[
+        int,
+        typer.Option(
+            help="How many pixels should be added to the"
+            "center to correct the geometry of the images."
+        ),
+    ],
     correction_factor: Annotated[
         float,
         typer.Option(
             help="How much more intense a center cross pixel is than a regular pixel"
         ),
     ],
-    additional_pixels: Annotated[
-        int,
+    central_four_factor: Annotated[
+        float,
         typer.Option(
-            help="How many pixels should be added to the"
-            "center to correct the geometry of the images."
+            help="How much more intense the four central pixels are than a regular pixel"
         ),
     ],
 ):
@@ -57,8 +66,60 @@ def pets_correct_center_cross(
 
     cur_dir = find_cred_project.find_cred_project()
     center_cross_correction.correct_center_cross(
-        cur_dir, correction_factor, additional_pixels
+        cur_dir,
+        additional_pixels=additional_pixels,
+        correction_factor=correction_factor,
+        central_four_factor=central_four_factor,
     )
+
+
+@app.command()
+def pets_correct_center_cross_calibration(
+    input: Annotated[Path, typer.Argument(help="Input image")],
+    output: Annotated[Path, typer.Argument(help="Output image")],
+    additional_pixels: Annotated[
+        int,
+        typer.Option(
+            help="How many pixels should be added to the"
+            "center to correct the geometry of the images."
+        ),
+    ],
+    correction_factor: Annotated[
+        float | None,
+        typer.Option(
+            help="How much more intense a center cross pixel is than a regular pixel"
+        ),
+    ] = None,
+    central_four_factor: Annotated[
+        float | None,
+        typer.Option(
+            help="How much more intense the four central pixels are than a regular pixel"
+        ),
+    ] = None,
+):
+    """Correct the center cross of a single image, used for correcting calibration images."""
+    from pets import center_cross_correction
+
+    if correction_factor is None:
+        correction_factor = 10000
+        rich.print(
+            f"[bold yellow]Warning: --correction-factor not set, defaulting to {correction_factor}"
+        )
+
+    if central_four_factor is None:
+        central_four_factor = correction_factor * 2
+        rich.print(
+            f"[bold yellow]Warning: --central-four-factor not set, defaulting to {central_four_factor}"
+        )
+
+    center_cross_correction.correct_center_cross_image(
+        input,
+        output,
+        correction_factor=correction_factor,
+        central_four_factor=central_four_factor,
+        additional_pixels=additional_pixels,
+    )
+    print(f"Wrote corrected image to {output}")
 
 
 @app.command()
@@ -79,6 +140,64 @@ def pets_mark_dead_pixels(
     from pets import mark_dead_pixels
 
     mark_dead_pixels.mark_dead_pixels(image, dead_pixels)
+
+
+class BeamstopType(str, enum.Enum):
+    cross = "cross"
+    square = "square"
+
+
+@app.command()
+def pets_create_beamstop(
+    output: Annotated[Path, typer.Argument(help="File to store beamstop in")],
+    image_width: Annotated[
+        int,
+        typer.Option(
+            ...,
+            "--image-width",
+            "-w",
+            help="Width of image in pixels, after eventual widening of the cross",
+        ),
+    ],
+    beamstop_width: Annotated[
+        int,
+        typer.Option(..., "--beamstop-width", "-b", help="Width of beamstop in pixels"),
+    ],
+    beamstop_kind: Annotated[
+        BeamstopType,
+        typer.Option(
+            ...,
+            "--beamstop-kind",
+            "-k",
+            help='Type of beamstop, either "cross" or "square"',
+        ),
+    ] = BeamstopType.cross,
+):
+    from pets.create_bs import create_bs, create_center_bs
+
+    if beamstop_kind == BeamstopType.cross:
+        bs = create_bs(beamstop_width=beamstop_width, image_width=image_width)
+    elif beamstop_kind == BeamstopType.square:
+        bs = create_center_bs(beamstop_width=beamstop_width, image_width=image_width)
+    else:
+        raise RuntimeError("Unreachable")
+
+    if output.exists() and output.is_dir():
+        output = output / "beamstop.xyz"
+        rich.print(
+            f"[bold yellow]Output path is an existing directory, writing to {output} instead"
+        )
+    if output.exists() and output.is_file():
+        yes = typer.confirm(
+            f"Trying to write to {output}.\nFile already exists. Override? ",
+            default=True,
+        )
+        if not yes:
+            return
+
+    with open(output, "w") as wf:
+        wf.write(bs)
+    print(f"Wrote {len(bs.splitlines())} lines to {output}")
 
 
 @app.command(

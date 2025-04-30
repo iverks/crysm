@@ -16,16 +16,21 @@ def find_center_cross_correction(flatfield_image: Path):
     cross_mask = np.zeros_like(img)
     cross_mask[255:257, :] = 1  # Cross
     cross_mask[:, 255:257] = 1  # Cross
-    # # Central 4 pixels are even more intense so we ignore them
-    # cross_mask[255:257, 255:257] = 2
+    cross_mask[255:257, 255:257] = 2  # Central 4
 
     cross = img[cross_mask == 1]
     rest = img[cross_mask == 0]
+    central = img[cross_mask == 2]
     cross_mean = np.mean(cross)
+    central_mean = np.mean(central)
     rest_mean = np.mean(rest)
     factor = cross_mean / rest_mean
-    num_extra_pixels = 2 if factor < 1.8 else 4
+    central_factor = central_mean / rest_mean
+    num_extra_pixels = 2 if factor < 1.9 else 4
     print(f"Mean value of cross: {cross_mean:.2f}")
+    print(f"Mean value of central four pixels: {central_mean:.2f}")
     print(f"Mean value of rest of image: {rest_mean:.2f}")
     print("Number of additional pixels should be verified with detector manufacturer")
-    print(f"--correction-factor {factor:.3f} --additional-pixels {num_extra_pixels}")
+    print(
+        f"--additional-pixels {num_extra_pixels} --correction-factor {factor:.3f} --central-four-factor {central_factor}"
+    )

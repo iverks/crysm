@@ -1,4 +1,3 @@
-import time
 from functools import lru_cache
 from pathlib import Path
 
@@ -90,4 +89,4 @@ def mark_dead_pixels(image: Path, dead_pixels_path: Path | None = None):
     with dead_pixels_path.open("w") as dp:
         for px, py in dead_pixels:
             dp.write(f"{px} {py}\n")
-    print(f"Wrote {len(dead_pixels)} to {dead_pixels_path}")
+    print(f"Wrote {len(dead_pixels)} dead pixels to {dead_pixels_path}")

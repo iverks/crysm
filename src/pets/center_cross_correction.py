@@ -4,9 +4,14 @@ import numpy as np
 import tifffile as tf
 from tqdm import tqdm
 
+from lib.mib import load_mib
 
-def jitted_image_correct(
-    img: np.ndarray, additional_pixels: int, correction_factor: float
+
+def image_correct(
+    img: np.ndarray,
+    additional_pixels: int,
+    correction_factor: float,
+    central_four_factor: float,
 ) -> np.ndarray:
     out_img = np.zeros((512 + additional_pixels, 512 + additional_pixels))
     post_gap = 257 + additional_pixels
@@ -33,21 +38,26 @@ def jitted_image_correct(
     )
 
     # Central square
-    out_img[255 : 255 + smear, 255 : 255 + smear] = img[255, 255] / correction_factor
+    out_img[255 : 255 + smear, 255 : 255 + smear] = img[255, 255] / central_four_factor
     out_img[post_gap - smear : post_gap, 255 : 255 + smear] = (
-        img[256, 255] / correction_factor
+        img[256, 255] / central_four_factor
     )
     out_img[255 : 255 + smear, post_gap - smear : post_gap] = (
-        img[255, 256] / correction_factor
+        img[255, 256] / central_four_factor
     )
     out_img[post_gap - smear : post_gap, post_gap - smear : post_gap] = (
-        img[256, 256] / correction_factor
+        img[256, 256] / central_four_factor
     )
     return out_img.astype(np.uint32)
 
 
 def correct_center_cross_image(
-    image: Path, out_file: Path, correction_factor: float, additional_pixels: int
+    image: Path,
+    out_file: Path,
+    *,
+    correction_factor: float,
+    central_four_factor: float,
+    additional_pixels: int,
 ):
     """
     Creates a copy of an image corrected for the central cross defect of the detector.
@@ -64,18 +74,27 @@ def correct_center_cross_image(
             2 pixels means 1 pixel is smeared to 2 (which adds one pixel on each side).
             4 pixels means 1 pixel is smeared to 3 (which adds two pixels on each side).
     """
-    with image.open("rb") as handle:
-        img = tf.imread(handle)
+    if image.suffix == ".tiff":
+        with image.open("rb") as handle:
+            img = tf.imread(handle)
+    elif image.suffix == ".mib":
+        img = load_mib(image.read_bytes())[0]
     assert img.shape == (512, 512), "Only images of 512 by 512 are supported for now"
     assert additional_pixels % 2 == 0, "Only even numbered gap sizes are supported"
-    out_img = jitted_image_correct(img, additional_pixels, correction_factor)
+    out_img = image_correct(
+        img, additional_pixels, correction_factor, central_four_factor
+    )
 
     with out_file.open("wb") as handle:
         tf.imwrite(handle, out_img)
 
 
 def correct_center_cross(
-    dataset: Path, correction_factor: float, additional_pixels: int
+    dataset: Path,
+    *,
+    additional_pixels: int,
+    correction_factor: float,
+    central_four_factor: float,
 ):
     corr_folder = dataset / "tiff_corr"
     corr_folder.mkdir(exist_ok=True)
@@ -88,8 +107,9 @@ def correct_center_cross(
         correct_center_cross_image(
             in_file,
             out_file,
-            correction_factor,
-            additional_pixels,
+            additional_pixels=additional_pixels,
+            correction_factor=correction_factor,
+            central_four_factor=central_four_factor,
         )
 
     print(f"Wrote {len(infiles)} corrected images to {corr_folder}")
