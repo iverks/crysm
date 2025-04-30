@@ -32,5 +32,5 @@ def find_center_cross_correction(flatfield_image: Path):
     print(f"Mean value of rest of image: {rest_mean:.2f}")
     print("Number of additional pixels should be verified with detector manufacturer")
     print(
-        f"--additional-pixels {num_extra_pixels} --correction-factor {factor:.3f} --central-four-factor {central_factor}"
+        f"--additional-pixels {num_extra_pixels} --correction-factor {factor:.3f} --central-four-factor {central_factor:.3f}"
     )
