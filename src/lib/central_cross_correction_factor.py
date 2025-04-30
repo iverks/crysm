@@ -1,9 +1,20 @@
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
 import tifffile as tf
 
 from lib.mib import load_mib
+
+
+@dataclass
+class CorrectionStats:
+    cross_mean: float
+    central_mean: float
+    rest_mean: float
+    factor: float
+    central_factor: float
+    num_extra_pixels: int
 
 
 def find_center_cross_correction(flatfield_image: Path):
@@ -27,10 +38,12 @@ def find_center_cross_correction(flatfield_image: Path):
     factor = cross_mean / rest_mean
     central_factor = central_mean / rest_mean
     num_extra_pixels = 2 if factor < 1.9 else 4
-    print(f"Mean value of cross: {cross_mean:.2f}")
-    print(f"Mean value of central four pixels: {central_mean:.2f}")
-    print(f"Mean value of rest of image: {rest_mean:.2f}")
-    print("Number of additional pixels should be verified with detector manufacturer")
-    print(
-        f"--additional-pixels {num_extra_pixels} --correction-factor {factor:.3f} --central-four-factor {central_factor:.3f}"
+
+    return CorrectionStats(
+        cross_mean=cross_mean,
+        central_mean=central_mean,
+        rest_mean=rest_mean,
+        factor=factor,
+        central_factor=central_factor,
+        num_extra_pixels=num_extra_pixels,
     )

@@ -31,12 +31,44 @@ The functionality of this library can be found by typing `crysm --help` or readi
 ### Example 1: Finding correction factors for the central cross from a flatfield image
 
 ```bash
-crysm find-center-cross-correction flatfield_200kV_24bit.tiff 
-> Mean value of cross: 40151.59
-> Mean value of central four pixels: 74076.75
-> Mean value of rest of image: 18284.44
+crysm find-center-cross-correction 24bit/flatfield_200kV_24bit.mib
+> For image: 24bit/flatfield_200kV_24bit.mib:
+>   Mean value of cross: 40151.59
+>   Mean value of central four pixels: 74076.75
+>   Mean value of rest of image: 18284.44
+> Suggested arguments for correction:
+>  --additional-pixels 4 --correction-factor 2.196 --central-four-factor 4.051
 > Number of additional pixels should be verified with detector manufacturer
-> --additional-pixels 4 --correction-factor 2.196 --central-four-factor 4.051
+```
+
+This command can also take multiple images, but they should be collected with the same parameters (unlike the example below):
+
+```bash
+crysm find-center-cross-correction 24bit/flatfield_200kV_24bit.mib 12bit/flatfield_200kV_12bit.mib 6bit/flatfield_200kV_6bit.mib                                          3.11   17:08:04
+> For image: 24bit/flatfield_200kV_24bit.mib:
+>   Mean value of cross: 40151.59
+>   Mean value of central four pixels: 74076.75
+>   Mean value of rest of image: 18284.44
+>   Additional pixels: 4
+>   Correction factor: 2.196
+>   Central four factor: 4.051
+> For image: 12bit/flatfield_200kV_12bit.mib:
+>   Mean value of cross: 2013.16
+>   Mean value of central four pixels: 3716.25
+>   Mean value of rest of image: 916.51
+>   Additional pixels: 4
+>   Correction factor: 2.197
+>   Central four factor: 4.055
+> For image: 6bit/flatfield_200kV_6bit.mib:
+>   Mean value of cross: 39.97
+>   Mean value of central four pixels: 63.00
+>   Mean value of rest of image: 18.22
+>   Additional pixels: 4
+>   Correction factor: 2.194
+>   Central four factor: 3.457
+> Suggested arguments for correction:
+>  --additional-pixels 4 --correction-factor 2.195 --central-four-factor 3.854
+> Number of additional pixels should be verified with detector manufacturer
 ```
 
 ### Example 2: Correcting the central cross of a calibration image
@@ -54,3 +86,4 @@ crysm pets-correct-center-cross --additional-pixels 4 --correction-factor 2.196 
 > 100%|█████████████████████████████████████████████████████████████████████████████| 1093/1093 [00:10<00:00, 109.19it/s]
 > Wrote 1093 corrected images to C:\Users\iverks\progging\master\cRED_070325\experiment_5\tiff_corr
 ```
+

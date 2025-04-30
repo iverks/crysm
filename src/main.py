@@ -26,13 +26,47 @@ def pets_calibrate_angles(
 
 
 @app.command()
-def find_center_cross_correction(flatfield_image: Path):
+def find_center_cross_correction(
+    flatfield_images: Annotated[
+        list[Path], typer.Argument(..., help="Flatfield images to use for calibration")
+    ],
+):
     """Find central cross intensity correction factor from a flatfield image.
     Supported formats are .tiff or .mib"""
     import lib
     import lib.central_cross_correction_factor
 
-    lib.central_cross_correction_factor.find_center_cross_correction(flatfield_image)
+    factors: list[float] = []
+    central_factors: list[float] = []
+    extra_pixels: list[int] = []
+
+    for flatfield in flatfield_images:
+        stats = lib.central_cross_correction_factor.find_center_cross_correction(
+            flatfield
+        )
+        print(f"For image: {flatfield}:")
+        print(f"  Mean value of cross: {stats.cross_mean:.2f}")
+        print(f"  Mean value of central four pixels: {stats.central_mean:.2f}")
+        print(f"  Mean value of rest of image: {stats.rest_mean:.2f}")
+        if len(flatfield_images) > 1:
+            print(f"  Additional pixels: {stats.num_extra_pixels}")
+            print(f"  Correction factor: {stats.factor:.3f}")
+            print(f"  Central four factor: {stats.central_factor:.3f}")
+        factors.append(stats.factor)
+        central_factors.append(stats.central_factor)
+        extra_pixels.append(stats.num_extra_pixels)
+
+    factor = sum(factors) / len(factors)
+    central_factor = sum(central_factors) / len(central_factors)
+    num_extra_pixels = max(extra_pixels)
+
+    print("Suggested arguments for correction:")
+    print(
+        f" --additional-pixels {num_extra_pixels}"
+        f" --correction-factor {factor:.3f}"
+        f" --central-four-factor {central_factor:.3f}"
+    )
+    print("Number of additional pixels should be verified with detector manufacturer")
 
 
 @app.command()
