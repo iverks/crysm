@@ -5,7 +5,7 @@ We assume:
 2. The end angle was recorded immediately after the start timestamp of the last image.
 3. The time between acquisition and end timestamp is constant for any given dataset.
 """
-
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -62,7 +62,7 @@ def calibrate_angles(percentage: float = 100, skip_after_defocus: bool = False):
     start_angle = float(cred_log.split("Starting angle: ")[1].split(" degrees")[0])
     end_angle = float(cred_log.split("Ending angle: ")[1].split(" degrees")[0])
     print(f"Parsed angles as {start_angle} to {end_angle}")
-        
+
     total_angle = end_angle - start_angle
     if percentage != 100:
         old_total_angle = total_angle
@@ -75,6 +75,13 @@ def calibrate_angles(percentage: float = 100, skip_after_defocus: bool = False):
 
     stats = get_stats_for_folder(cur_dir / "tiff")
     total_time = stats.end - stats.start
+
+    timesteps = [b - a for a,b in zip(stats.end_times[:-1], stats.end_times[1:])]
+    timesteps.sort()
+    median_timestep = timesteps[len(timesteps)//2]
+    semiangle = median_timestep / total_time * total_angle / 2
+    anynumber_regex = r"\d+\.?\d*"
+    rest = re.sub(f"phi {anynumber_regex}\n", f"phi {semiangle:.4f}\n", rest)
 
     if percentage == 100:
         perc = "pets"
@@ -98,4 +105,4 @@ def calibrate_angles(percentage: float = 100, skip_after_defocus: bool = False):
             petsout.write(f"tiff/{name:05d}.tiff   {angle:.4f} {0.0:.2f}\n")
 
         petsout.write("endimagelist\n\n")
-    print(f"Wrote image list to {filename}")
+    print(f"Wrote image list to {filename}. Semiangle was set to {semiangle}")
