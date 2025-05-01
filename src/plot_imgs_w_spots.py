@@ -10,10 +10,9 @@ from matplotlib.widgets import Slider
 
 import lib.find_cred_project as find_cred_project
 
-T = TypeVar("T")
 
 
-def peek(iterator: Generator[T, None, None]) -> tuple[T, Generator[T, None, None]]:
+def peek[T](iterator: Generator[T, None, None]) -> tuple[T, Generator[T, None, None]]:
     first = next(iterator)
     iterator = it.chain((first,), iterator)
     return first, iterator

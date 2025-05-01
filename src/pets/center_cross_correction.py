@@ -2,7 +2,7 @@ from pathlib import Path
 
 import numpy as np
 import tifffile as tf
-from tqdm import tqdm
+from rich.progress import track as tqdm
 
 from lib.mib import load_mib
 
