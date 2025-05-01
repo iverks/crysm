@@ -171,6 +171,11 @@ def pets_mark_dead_pixels(
         ),
     ] = None,
 ):
+    """
+    Open an interactive matplotlib window to mark pixels as dead.
+    Double click to mark a pixel as dead.
+    Use "a" and "d" as arrow keys to rotate through the dataset.
+    """
     from pets import mark_dead_pixels
 
     mark_dead_pixels.mark_dead_pixels(image, dead_pixels)

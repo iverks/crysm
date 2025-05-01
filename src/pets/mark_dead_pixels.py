@@ -1,4 +1,4 @@
-from functools import lru_cache
+from functools import cache
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -9,14 +9,17 @@ from matplotlib.patches import Rectangle
 
 
 def parse_dead_pixels(dead_pixels: Path) -> list[tuple[int, int]]:
-    out = []
-    for line in dead_pixels.read_text().strip().splitlines():
-        a, b = [int(part) for part in line.strip().split()]
-        out.append((a, b))
-    return out
+    try:
+        out = []
+        for line in dead_pixels.read_text().strip().splitlines():
+            a, b = [int(part) for part in line.strip().split()]
+            out.append((a, b))
+        return out
+    except FileNotFoundError:
+        return []
 
 
-@lru_cache
+@cache
 def load_image(image: Path):
     return tf.imread(image)
 
