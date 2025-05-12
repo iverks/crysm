@@ -5,12 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "numba>=0.61.2",
-    "numpy>=1.0.0",
+    "imagecodecs>=2025.3.30",
+    "numpy>1.24.4",
     "matplotlib>=3.7.5",
     "pydantic>=2.11.3",
     "rich>=13.7.1",
-    "tifffile>=2025.3.30",
+    "tifffile>=2025.5.10",
     "typer>=0.15.2",
 ]
 

@@ -76,7 +76,11 @@ def correct_center_cross_image(
     """
     if image.suffix == ".tiff":
         with image.open("rb") as handle:
-            img = tf.imread(handle)
+            with tf.TiffFile(handle) as infile:
+                page = infile.pages[0]
+                img = page.asarray()
+                _header = page.tags.get("ImageDescription", None)
+                header = _header.value if _header is not None else None
     elif image.suffix == ".mib":
         img = load_mib(image.read_bytes())[0]
     assert img.shape == (512, 512), "Only images of 512 by 512 are supported for now"
@@ -86,7 +90,9 @@ def correct_center_cross_image(
     )
 
     with out_file.open("wb") as handle:
-        tf.imwrite(handle, out_img)
+        tf.imwrite(
+            handle, out_img, compression="zlib", software="crysm", description=header
+        )
 
 
 def correct_center_cross(
