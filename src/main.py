@@ -18,11 +18,12 @@ def pets_calibrate_angles(
         typer.Option(help="Estimaged percentage of total angle range really spanned"),
     ] = 100,
     skip: Annotated[bool, typer.Option(help="Skip first frame after defocus")] = False,
+    plot: Annotated[bool, typer.Option(help="Plot timestep histogram")] = False
 ):
     import pets
     import pets.calibrate_angles
 
-    pets.calibrate_angles.calibrate_angles(percentage=range, skip_after_defocus=skip)
+    pets.calibrate_angles.calibrate_angles(percentage=range, skip_after_defocus=skip, plot_timesteps=plot)
 
 
 @app.command()

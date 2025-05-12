@@ -56,7 +56,7 @@ def get_stats_for_folder(dataset: Path):
     return DatasetStat(start_times[0], end_times[-1], end_times, names)
 
 
-def calibrate_angles(percentage: float = 100, skip_after_defocus: bool = False):
+def calibrate_angles(percentage: float = 100, skip_after_defocus: bool = False, plot_timesteps: bool = False):
     cur_dir = find_cred_project()
     cred_log = (cur_dir / "cRED_log.txt").read_text(errors="ignore")
     start_angle = float(cred_log.split("Starting angle: ")[1].split(" degrees")[0])
@@ -77,11 +77,25 @@ def calibrate_angles(percentage: float = 100, skip_after_defocus: bool = False):
     total_time = stats.end - stats.start
 
     timesteps = [b - a for a,b in zip(stats.end_times[:-1], stats.end_times[1:])]
-    timesteps.sort()
-    median_timestep = timesteps[len(timesteps)//2]
-    semiangle = median_timestep / total_time * total_angle / 2
+    semiangles = [timestep / total_time * total_angle / 2 for timestep in timesteps]
+    
+    if plot_timesteps:
+        import matplotlib.pyplot as plt
+        import numpy as np
+        _, (ax1, ax2) = plt.subplots(1,2)
+        anglz = np.array(timesteps)
+        ax1.plot(anglz)
+        ax1.set_title("Timesteps")
+        anglz = anglz[anglz < np.median(timesteps)*3]
+        ax2.hist(list(anglz), bins=len(anglz))
+        ax2.set_title("Timestep histogram")
+        plt.show()
+        plt.close()
+
+    semiangles.sort()
+    median_semiangle = semiangles[len(semiangles)//2]
     anynumber_regex = r"\d+\.?\d*"
-    rest = re.sub(f"phi {anynumber_regex}\n", f"phi {semiangle:.4f}\n", rest)
+    rest = re.sub(f"phi {anynumber_regex}\n", f"phi {median_semiangle:.4f}\n", rest)
 
     if percentage == 100:
         perc = "pets"
@@ -105,4 +119,4 @@ def calibrate_angles(percentage: float = 100, skip_after_defocus: bool = False):
             petsout.write(f"tiff/{name:05d}.tiff   {angle:.4f} {0.0:.2f}\n")
 
         petsout.write("endimagelist\n\n")
-    print(f"Wrote image list to {filename}. Semiangle was set to {semiangle}")
+    print(f"Wrote image list to {filename}. Semiangle was set to {median_semiangle}")
