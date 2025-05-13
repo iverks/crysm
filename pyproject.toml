@@ -12,6 +12,7 @@ dependencies = [
     "rich>=13.7.1",
     "tifffile>=2025.5.10",
     "typer>=0.15.2",
+    "click==8.1.8",
 ]
 
 [dependency-groups]
