@@ -1,9 +1,9 @@
 [project]
 name = "crysm"
-version = "0.1.1"
+version = "0.1.2"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 dependencies = [
     "imagecodecs>=2025.3.30",
     "numpy>1.24.4",
@@ -12,7 +12,7 @@ dependencies = [
     "rich>=13.7.1",
     "tifffile>=2025.5.10",
     "typer>=0.15.2",
-    "click==8.1.8",
+    "click==8.2.0",
 ]
 
 [dependency-groups]
@@ -22,4 +22,4 @@ dev = ["ipympl>=0.9.3", "jupyter>=1.1.1", "pyxem>=0.20.0"]
 crysm = "main:app"
 
 [tool.uv]
-package=true
+package = true
