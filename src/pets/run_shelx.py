@@ -126,14 +126,12 @@ def run_shelx(pts_file: Path, composition: str, shelxt_args: list[str]):
     hkl_file = pts_file.with_name(pts_file.stem + "_shelx.hkl")
     ins_file = pts_file.with_name(pts_file.stem + "_shelx.ins")
     sfac = "SFAC " + " ".join([el[0] for el in elements]) + "\n"
-    cell = "CELL " + " ".join([str(el[1]) for el in elements]) + "\n"
-    print(sfac)
-    print(cell)
+    unit = "UNIT " + " ".join([str(el[1]) for el in elements]) + "\n"
     assert hkl_file.exists()
     assert ins_file.exists()
     ins_string = ins_file.read_text()
     ins_string = re.sub("SFAC.*\n", sfac, ins_string)
-    ins_string = re.sub("CELL.*\n", cell, ins_string)
+    ins_string = re.sub("UNIT.*\n", unit, ins_string)
     shutil.copyfile(hkl_file, shelx_folder / hkl_file.name)
     (shelx_folder / ins_file.name).write_text(ins_string)
     subprocess.call(
