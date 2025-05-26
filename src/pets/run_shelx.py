@@ -134,7 +134,10 @@ def run_shelx(pts_file: Path, composition: str, shelxt_args: list[str]):
     ins_string = re.sub("SFAC.*\n", sfac, ins_string)
     ins_string = re.sub("CELL.*\n", cell, ins_string)
     (shelx_folder / ins_file.name).write_text(ins_string)
-    subprocess.call(shlex.split(f"shelxt {ins_file.stem} -l{laue_class}") + shelxt_args)
+    subprocess.call(
+        shlex.split(f"shelxt {ins_file.stem} -l{laue_class}") + shelxt_args,
+        cwd=shelx_folder,
+    )
 
 
 if __name__ == "__main__":
