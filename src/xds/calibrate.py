@@ -3,7 +3,7 @@ def calibrate(rotation_axis: float, pixel_size: float):
 
     # Additional data to compute camera length
     physical_pixel_size = 0.0550
-    wavelength = 0.0251
+    wavelength = 0.0251  # 200kV
 
     detector_distance = 1 / wavelength * (physical_pixel_size / pixel_size)
     print(f"DETECTOR_DISTANCE={detector_distance:.4f}")

@@ -18,12 +18,14 @@ def pets_calibrate_angles(
         typer.Option(help="Estimaged percentage of total angle range really spanned"),
     ] = 100,
     skip: Annotated[bool, typer.Option(help="Skip first frame after defocus")] = False,
-    plot: Annotated[bool, typer.Option(help="Plot timestep histogram")] = False
+    plot: Annotated[bool, typer.Option(help="Plot timestep histogram")] = False,
 ):
     import pets
     import pets.calibrate_angles
 
-    pets.calibrate_angles.calibrate_angles(percentage=range, skip_after_defocus=skip, plot_timesteps=plot)
+    pets.calibrate_angles.calibrate_angles(
+        percentage=range, skip_after_defocus=skip, plot_timesteps=plot
+    )
 
 
 @app.command()
@@ -213,6 +215,9 @@ def pets_create_beamstop(
         ),
     ] = BeamstopType.cross,
 ):
+    """
+    Create a beamstop
+    """
     from pets.create_bs import create_bs, create_center_bs
 
     if beamstop_kind == BeamstopType.cross:
@@ -238,6 +243,40 @@ def pets_create_beamstop(
     with open(output, "w") as wf:
         wf.write(bs)
     print(f"Wrote {len(bs.splitlines())} lines to {output}")
+
+
+@app.command(
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
+)
+def pets_solve(
+    composition: Annotated[
+        str,
+        typer.Option(
+            ...,
+            "-m",
+            "--composition",
+            help="Composition of substance, e.g. SiO or Si2O4. Case sensitive.",
+        ),
+    ],
+    pets_file: Annotated[
+        Path, typer.Argument(..., help="Pets .pts2 file to read the Laue class from")
+    ],
+    ctx: typer.Context,
+):
+    """
+    Runs SHELXT on the given project using the generated .hkl and .ins files from newest integration.
+    Adds elements to .ins file and runs with the Laue group found in .pts2 file
+    Any arguments can be added after the .pts2 file and will be passed on to SHELXT:
+
+    `crysm pets-solve pets.pts2 -l4`
+    """
+    from pets.run_shelx import run_shelx
+
+    if not (isinstance(pets_file, Path) and pets_file.suffix == ".pts2"):
+        raise RuntimeError(
+            f"The first argument should be a .pts2 file, got {pets_file}"
+        )
+    run_shelx(pets_file, composition, ctx.args)
 
 
 @app.command(
