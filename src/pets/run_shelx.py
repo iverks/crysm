@@ -80,7 +80,12 @@ def run_shelx(pts_file: Path, composition: str, shelxt_args: list[str]):
     assert hkl_file.exists()
     assert ins_file.exists()
     shutil.copyfile(hkl_file, shelx_folder)
-    shutil.copyfile(ins_file, shelx_folder)
+    ins_string = ins_file.read_text()
+    sfac = "SFAC " + " ".join([el[0] for el in elements])
+    cell = "CELL " + " ".join([str(el[1]) for el in elements])
+    ins_string = re.sub("SFAC.*\n", sfac, ins_string)
+    ins_string = re.sub("CELL.*\n", cell, ins_string)
+    (shelx_folder / ins_file.name).write_text(ins_string)
     subprocess.call(shlex.split(f"shelx {ins_file.stem} -l{laue_class}") + shelxt_args)
 
 
