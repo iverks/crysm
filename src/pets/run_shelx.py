@@ -79,7 +79,7 @@ def run_shelx(pts_file: Path, composition: str, shelxt_args: list[str]):
     ins_file = pts_file.with_name(pts_file.stem + "_shelx.ins")
     assert hkl_file.exists()
     assert ins_file.exists()
-    shutil.copyfile(hkl_file, shelx_folder)
+    shutil.copyfile(hkl_file, shelx_folder / hkl_file.name)
     ins_string = ins_file.read_text()
     sfac = "SFAC " + " ".join([el[0] for el in elements])
     cell = "CELL " + " ".join([str(el[1]) for el in elements])
