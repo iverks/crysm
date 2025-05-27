@@ -266,9 +266,9 @@ def pets_solve(
     """
     Runs SHELXT on the given project using the generated .hkl and .ins files from newest integration.
     Adds elements to .ins file and runs with the Laue group found in .pts2 file
-    Any arguments can be added after the .pts2 file and will be passed on to SHELXT:
+    Any arguments can be added after the .pts2 file and will be passed on to SHELXT, overriding the defaults set by crysm:
 
-    `crysm pets-solve pets.pts2 -l4`
+    `crysm pets-solve pets.pts2 -l4 -a"0.5"`
     """
     from pets.run_shelx import run_shelx
 

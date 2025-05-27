@@ -135,7 +135,7 @@ def run_shelx(pts_file: Path, composition: str, shelxt_args: list[str]):
     shutil.copyfile(hkl_file, shelx_folder / hkl_file.name)
     (shelx_folder / ins_file.name).write_text(ins_string)
     subprocess.call(
-        shlex.split(f"shelxt {ins_file.stem} -l{laue_class}") + shelxt_args,
+        shlex.split(f"shelxt {ins_file.stem} -l{laue_class} -a0.6") + shelxt_args,
         cwd=shelx_folder,
     )
 
