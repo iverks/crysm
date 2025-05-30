@@ -93,7 +93,7 @@ def calibrate_angles(percentage: float = 100, skip_after_defocus: bool = False, 
         plt.close()
 
     semiangles.sort()
-    median_semiangle = semiangles[len(semiangles)//2]
+    median_semiangle = abs(semiangles[len(semiangles)//2])
     anynumber_regex = r"\d+\.?\d*"
     rest = re.sub(f"phi {anynumber_regex}\n", f"phi {median_semiangle:.4f}\n", rest)
 

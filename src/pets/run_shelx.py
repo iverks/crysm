@@ -134,10 +134,13 @@ def run_shelx(pts_file: Path, composition: str, shelxt_args: list[str]):
     ins_string = re.sub("UNIT.*\n", unit, ins_string)
     shutil.copyfile(hkl_file, shelx_folder / hkl_file.name)
     (shelx_folder / ins_file.name).write_text(ins_string)
+    command = shlex.split(f"shelxt {ins_file.stem} -l{laue_class} -a0.6") + shelxt_args
+    print(f"Running SHELX: {shlex.join(command)}")
     subprocess.call(
-        shlex.split(f"shelxt {ins_file.stem} -l{laue_class} -a0.6") + shelxt_args,
+        command,
         cwd=shelx_folder,
     )
+
 
 
 if __name__ == "__main__":

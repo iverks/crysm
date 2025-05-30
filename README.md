@@ -87,3 +87,8 @@ crysm pets-correct-center-cross --additional-pixels 4 --correction-factor 2.196 
 > Wrote 1093 corrected images to C:\Users\iverks\progging\master\cRED_070325\experiment_5\tiff_corr
 ```
 
+## Developers
+
+- `pets/run_shelx.py` depends on the internal format of .pts2-files, future updates might break
+- `lib/find_cred_project.py` depends on the existence of cRED_log.txt, which Stef Smeets has hinted at removing in the future. Beware.
+- To publish a new update to PyPi, bump the version number in pyproject.toml, then run `uv publish`. Developer permissions must be acquired first. 
