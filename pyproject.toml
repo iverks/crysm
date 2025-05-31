@@ -25,7 +25,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["ipympl>=0.9.3", "jupyter>=1.1.1", "pyxem>=0.20.0"]
-docs = ["mkdocs", "mkdocs-typer2", "mkdocs-material"]
+docs = ["mkdocs", "mkdocs-typer2", "pymdown-extensions ", "mkdocs-material"]
 
 [project.scripts]
 crysm = "main:app"

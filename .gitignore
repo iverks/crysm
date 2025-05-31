@@ -7,3 +7,4 @@ simulations.pkl
 build
 **/*.egg-info
 site
+docs/cred_guide.pdf

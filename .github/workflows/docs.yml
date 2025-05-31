@@ -20,8 +20,15 @@ jobs:
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: 3.13
+      - name: Setup typst
+        uses: typst-community/setup-typst@13c527d2e8ac7863a24510c4043ad28fd47a5606 # v4.1.0
+        with:
+          typst-version: 0.13.0
       - name: Install
         run: pip install .[docs]
+
+      - name: Typst compile
+        run: typst compile typst-guide/main.typ docs/cred_guide.pdf
       - name: Mkdocs build
         run: mkdocs build
       - name: Deploy
