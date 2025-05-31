@@ -1,0 +1,6 @@
+{
+    "ruff.enable": true,
+    "python.analysis.extraPaths": [
+        "src"
+    ]
+}
