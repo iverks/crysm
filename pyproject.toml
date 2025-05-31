@@ -1,7 +1,7 @@
 [project]
 name = "crysm"
 version = "0.1.4"
-description = "Add your description here"
+description = "Continuous rotation electron diffraction (cRED) data analysis helper cli"
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
@@ -25,7 +25,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["ipympl>=0.9.3", "jupyter>=1.1.1", "pyxem>=0.20.0"]
-docs = ["sphinx", "sphinx-rtd-theme", "nbsphinx", "IPython", "ipykernel"]
+docs = ["mkdocs", "mkdocs-typer2", "mkdocs-material"]
 
 [project.scripts]
 crysm = "main:app"

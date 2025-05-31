@@ -6,3 +6,4 @@ simulations.pkl
 *.hspy
 build
 **/*.egg-info
+site

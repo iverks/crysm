@@ -6,12 +6,14 @@ import rich
 import typer
 from typer import Typer
 
-app = Typer(name="crysm", no_args_is_help=True)
-
-
-@app.command(
-    help="Calibrate the angle of each image based on the timestamps in their metadata"
+app = Typer(
+    name="crysm",
+    no_args_is_help=True,
+    help="Collection of scripts for CRED. PETS specific commands are prefixed by `pets-`, XDS specific commands by `xds-`",
 )
+
+
+@app.command()
 def pets_calibrate_angles(
     range: Annotated[
         float,
@@ -20,6 +22,11 @@ def pets_calibrate_angles(
     skip: Annotated[bool, typer.Option(help="Skip first frame after defocus")] = False,
     plot: Annotated[bool, typer.Option(help="Plot timestep histogram")] = False,
 ):
+    """Calibrate the angle of each image based on the timestamps in their metadata.
+    Generates
+
+    Example usage: `crysm pets-calibrate-angles`
+    """
     import pets
     import pets.calibrate_angles
 
@@ -35,7 +42,10 @@ def find_center_cross_correction(
     ],
 ):
     """Find central cross intensity correction factor from a flatfield image.
-    Supported formats are .tiff or .mib"""
+    Supported formats are .tiff or .mib
+
+    Example usage: `crysm finc-center-cross-correction flatfield.mib`
+    """
     import lib
     import lib.central_cross_correction_factor
 
@@ -77,26 +87,38 @@ def pets_correct_center_cross(
     additional_pixels: Annotated[
         int,
         typer.Option(
+            ...,
+            "--additional-pixels",
+            "-a",
             help="How many pixels should be added to the"
-            "center to correct the geometry of the images."
+            "center to correct the geometry of the images.",
         ),
     ],
     correction_factor: Annotated[
         float,
         typer.Option(
-            help="How much more intense a center cross pixel is than a regular pixel"
+            ...,
+            "--correction-factor",
+            "-c",
+            help="How much more intense a center cross pixel is than a regular pixel",
         ),
     ],
     central_four_factor: Annotated[
         float,
         typer.Option(
-            help="How much more intense the four central pixels are than a regular pixel"
+            ...,
+            "--central-four-factor",
+            "-C",
+            help="How much more intense the four central pixels are than a regular pixel",
         ),
     ],
 ):
     """
     Correct central cross of a dataset given the intensity
-    correction factor and the number of pixels in the gap
+    correction factor and the number of pixels in the gap.
+
+    Example usage: `crysm pets-correct-center-cross --additional-pixels 2
+    --correction-factor 2.196 --central-four-factor 4.051`
     """
     from lib import find_cred_project
     from pets import center_cross_correction
@@ -134,7 +156,11 @@ def pets_correct_center_cross_calibration(
         ),
     ] = None,
 ):
-    """Correct the center cross of a single image, used for correcting calibration images."""
+    """Correct the center cross of a single image, used for correcting calibration images.
+
+    Example usage: `crysm pets-correct-center-cross-calibration --additional-pixels 2
+    flatfield.mib flatfield_2px_corrected.tiff`
+    """
     from pets import center_cross_correction
 
     if correction_factor is None:
@@ -178,6 +204,9 @@ def pets_mark_dead_pixels(
     Open an interactive matplotlib window to mark pixels as dead.
     Double click to mark a pixel as dead.
     Use "a" and "d" as arrow keys to rotate through the dataset.
+
+    Example usage: `crysm pets-mark-dead-pixels
+    --correction-factor 2.196 --central-four-factor 4.051`
     """
     from pets import mark_dead_pixels
 

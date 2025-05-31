@@ -1,0 +1,32 @@
+site_name: crysm
+site_url: https://iverks.github.io/crysm/
+theme:
+  name: "material"
+  palette:
+    scheme: slate
+    primary: deep orange
+    accent: green
+features:
+  - announce.dismiss
+  - content.action.edit
+  - content.action.view
+  - content.code.annotate
+  - content.code.copy
+  - content.tooltips
+  - navigation.footer
+  - navigation.indexes
+  - navigation.sections
+  # - navigation.tabs
+  # - navigation.tabs.sticky
+  - navigation.top
+  - search.highlight
+  - search.suggest
+  - toc.follow
+plugins:
+  - search:
+  - mkdocs-typer2:
+nav:
+  - Home: index.md
+  - Reference: reference.md
+watch:
+  - src

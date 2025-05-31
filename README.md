@@ -2,10 +2,10 @@
 
 ## Installation
 
-In order to install the package, run 
+The package can be installed from PyPI using 
 
 ```bash
-uv tool install -e .
+pip install crysm
 ```
 
 This exposes the `crysm` command. To see available commands, run `crysm --help`. The commands correspond to the decorated functions in `src/main.py`.
@@ -88,6 +88,14 @@ crysm pets-correct-center-cross --additional-pixels 4 --correction-factor 2.196 
 ```
 
 ## Developers
+
+In order to install the package locally, run 
+
+```bash
+uv tool install -e .
+```
+
+The `crysm` command is then available globally.
 
 - `pets/run_shelx.py` depends on the internal format of .pts2-files, future updates might break
 - `lib/find_cred_project.py` depends on the existence of cRED_log.txt, which Stef Smeets has hinted at removing in the future. Beware.

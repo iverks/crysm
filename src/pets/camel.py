@@ -5,6 +5,7 @@ from pathlib import Path
 
 from matplotlib import pyplot as plt
 
+
 @dataclass(slots=True)
 class CamelLine:
     shell: float
@@ -12,6 +13,7 @@ class CamelLine:
     rsg: float
     rc: float
     rcalc: float
+
 
 @dataclass()
 class CamelData:
@@ -27,7 +29,7 @@ class CamelData:
         for line in self.data:
             _excitations[line.shell].append(line.excitation)
         return _excitations
-        
+
     @cached_property
     def rcs(self):
         _rcs = defaultdict(list)
@@ -36,14 +38,18 @@ class CamelData:
         return _rcs
 
 
-def parse_camel(file: Path) -> list[CamelLine]:
+def parse_camel(file: Path) -> CamelData:
     data = []
     for line in file.open():
         line = line.strip()
         if not line:
             continue
         shell, excitation, rsg, rc, rcalc = line.split()
-        data.append(CamelLine(float(shell), float(excitation), float(rsg), float(rc), float(rcalc)))
+        data.append(
+            CamelLine(
+                float(shell), float(excitation), float(rsg), float(rc), float(rcalc)
+            )
+        )
     return CamelData(data)
 
 
@@ -54,11 +60,13 @@ def plot_camel(data: CamelData):
         exc = data.excitations[shell]
         rcd = data.rcs[shell]
         ax.plot(exc, [rc + shell for rc in rcd])
-    
+
     return ax
+
 
 if __name__ == "__main__":
     from lib.find_cred_project import find_cred_project
+
     cur_dir = find_cred_project()
     camelfiles = list(cur_dir.glob("**/*.cml"))
     if len(camelfiles) == 0:
