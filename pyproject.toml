@@ -4,6 +4,13 @@ version = "0.1.4"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
 dependencies = [
     "click==8.1.8",
     "imagecodecs>=2025.3.30",
@@ -16,7 +23,7 @@ dependencies = [
     "pyyaml>=6.0.0",
 ]
 
-[dependency-groups]
+[project.optional-dependencies]
 dev = ["ipympl>=0.9.3", "jupyter>=1.1.1", "pyxem>=0.20.0"]
 docs = ["sphinx", "sphinx-rtd-theme", "nbsphinx", "IPython", "ipykernel"]
 
