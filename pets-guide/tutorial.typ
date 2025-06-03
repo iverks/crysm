@@ -272,21 +272,17 @@ On the second run, the center determination should be set to "Use saved centers"
 The initial $omega$ angle should already be set to an initial estimate from #ref(<section:setting-pts-params>). Run the step without enabling "Global search for tilt axis position $omega$". Usually enabling the optimization of the $delta$ angle leads to worse results. Note that the $delta$ angle is refined on a frame by frame basis in #ref(<section:frame-geometry>).
 
 #note[Help][Finding an initial guess for the tilt axis][
-  // TODO: figur
-
   In #ref(<fig:laue-circle-movement>) we can see three equally spaced frames from the Mordenite 1 dataset.
   We can see the Laue circle, the intersection between a layer of the reciprocal crystal and the Ewald sphere, moving across the image.
   This should be present in most data sets, but not all, and the distance of the path from the origin might vary depending on the crystal orientation.
-
-
+  The center of the Laue circle can be traced across the dataset.
+  In the figure, an estimation of the circle has been superimposed in red along with its center.
+  In #ref(<fig:laue-circle-movement>)c), the centers from the previous frames are added as well in transparent red, and the trace has been sketched by the dashed red line.
+  Then we can see that the rotation axis (green double lines) is perpendicular to the trace of the Laue circle center.
+  It is sufficient to approximate this direction, since #PETS refines the rotation axis.
 
   The green lines for the tilt axis can be enabled by checking "Resolution rings, tilt axis and ice rings" in the "Image options" tab of the right window.
   The found peaks are marked with green rings when "Peak search" right below is checked and a peak search has been run.
-
-  When looking through the images, you will see some frames where a circle can be traced.
-  The rotation axis should be orthogonal to the direction of movement of the center of the circle.
-
-  The rotation axis (green double lines in all images). Should be
 
   #figure(
     image("/images/rotation_axis/laue_circle_moving.png"),
@@ -301,7 +297,8 @@ The initial $omega$ angle should already be set to an initial estimate from #ref
 
 #note[Possible issue][The tilt axis is unknown][
   If the tilt axis is unknown and can't be guessed from observing the path of the Ewald sphere over the images, "Global search for tilt axis position $omega$" can be enabled.
-  Sometimes this finds a local minimum instead. Then it might be better to do many local searches from several initial guesses, for example every #qty(10, "degree") or #qty(20, "degree").
+  Sometimes this finds a local minimum instead.
+  If that is the case, it might be better to do many local searches from several initial guesses, for example every #qty(10, "degree") or #qty(20, "degree").
 ]
 
 == Peak analysis <section:peak-analysis>
