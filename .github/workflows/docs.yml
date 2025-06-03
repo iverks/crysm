@@ -28,7 +28,7 @@ jobs:
         run: pip install .[docs]
 
       - name: Typst compile
-        run: typst compile typst-guide/main.typ docs/cred_guide.pdf
+        run: typst compile pets-guide/main.typ docs/cred_guide.pdf
       - name: Mkdocs build
         run: mkdocs build
       - name: Deploy
