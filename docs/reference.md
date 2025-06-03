@@ -1,1 +1,1 @@
-::: mkdocs-typer2 :module: main :name: crysm
+::: mkdocs-typer2 :module: main :name: crysm :pretty: false

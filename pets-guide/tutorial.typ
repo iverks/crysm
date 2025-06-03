@@ -475,9 +475,24 @@ python3 -m edtools.make_shelx -s Pnma -m Si1 O2 -c 13.029 19.994 20.102 90 90 90
 
 Note that you must explicitly specify the 1 that is normally omitted from $"SiO"_2$.
 
-Rename the generated `shelx.ins` such that it has the same name as your `.hkl` file. It might be nice to save a backup of the file if you want to try multiple `.hkl` files with the same unit cell, because Olex2 modifies the `.ins` file when run.
+Rename the generated `shelx.ins` such that it has the same name as your `.hkl` file. It might be nice to save a backup of the `.ins` file if you want to try multiple `.hkl` files with the same unit cell, because Olex2 modifies the `.ins` file when run.
 
-Start the Olex2 program and open the `.ins` file. Open the "Work" tab and click the "solve" button. Use the command `pack cell` in the command line in the bottom left corner to grow the structure to a full cell for easier inspection. Use the command `fuse` to revert back to the anisotropic unit before refinement.
+Start the Olex2 program and open the `.ins` file. Open the "Work" tab and click the arrow to the right of the "solve" button.
+This opens the options for structure solution.
+Since we expect slightly higher errors than in X-ray data, we need to increase the $alpha$ threshold for selecting possible space groups.
+This is done in the "COMMAND LINE" section under the "Solution settings extra" dropdown as shown in #ref(<fig:set-shelxt-flag>).
+There we can set the `-a` flag to a higher value, for example `-a"0.6"`.
+If your structure is centrosymmetric, make sure the output from SHELXT does *not* say "0 Centrosymmetric and N non-centrosymmetric space groups evaluated".
+If this is the case, increase the value passed to the `-a` flag.
+
+#figure(
+  image("/images/set_flags_in_shelx.png", width: 80%),
+  caption: [Flags can be set for SHELXT in Olex2 using the "Solution settings extra" dropdown.],
+) <fig:set-shelxt-flag>
+
+Then, solution can be started by clicking the "solve" button.
+Use the command `pack cell` in the command line in the bottom left corner to grow the structure to a full cell for easier inspection.
+Use the command `fuse` to revert back to the anisotropic unit before refinement.
 
 For refinement we refer to the previous manual, whose first version is openly available at #cite(<teien>, supplement: [Appendix A.3]). An updated version can be found in the private repository https://github.com/TEM-Gemini-Centre/developments.
 
@@ -495,20 +510,17 @@ For refinement we refer to the previous manual, whose first version is openly av
 
 #note[Potential issue][SHELXT finds the wrong space group][
   If SHELXT is unable to find the correct space group, the space group can be manually enforced using the command line flag `-S[SPACE GROUP]`, e.g. `-SPnma`.
-  Using Olex2, this is done in the "COMMAND LINE" section under the "Solution settings extra" dropdown as shown in #ref(<fig:set-l-flag>).
+  Using Olex2, this is done in the "COMMAND LINE" section under the "Solution settings extra" dropdown as shown in #ref(<fig:set-shelxt-flag>).
 ]
 
 == Without edtools
 
-Edtools is not hard to install, but it's dependencies `cctbx.python` or `sginfo` are. Edtools does two things differently when making .ins files than #PETS.
+Edtools is not hard to install, but it's dependencies `cctbx.python` or `sginfo` are.
+When making .ins files, edtools does two things differently from #PETS.
 It sets the symmetries from the space group supplied, and the composition with structure factors.
-To compensate for the first, SHELXT can find the symmetries from the Laue group that can be supplied using the command line parameter `-L[LAUE GROUP NUMBER]`.
-When running in Olex2, the `-L` flag can be set in the #acr("GUI") as shown in #ref(<fig:set-l-flag>). This has the added bonus that we don't need to determine the space group, only the Laue group is determined by #PETS automatically.
-
-#figure(
-  image("/images/set_flags_in_shelx.png", width: 80%),
-  caption: [Flags can be set in SHELXT using the "Solution settings extra" dropdown.],
-) <fig:set-l-flag>
+To compensate for the first, SHELXT can find the symmetries from the Laue group that can be supplied using the command line parameter `-l[LAUE GROUP NUMBER]`.
+When running in Olex2, the `-l` flag can be set in the #acr("GUI") as shown in #ref(<fig:set-shelxt-flag>).
+This has the added bonus that we don't need to determine the space group, only the Laue group, which is automatically determined by #PETS during integration.
 
 To compensate for the second is not necessary, we only need to add the composition, for example adding $"SiO"_2$:
 
@@ -516,6 +528,7 @@ To compensate for the second is not necessary, we only need to add the compositi
 SFAC O Si
 UNIT 2 1
 ```
+
 SHELX knows the scattering factors for the given atoms, so the result is equal to when inserting the composition along with the scattering factors.
 
 The laue group numbers are between 1 and 17, and the human-readable Laue group is printed by SHELXT when running. The echoed Laue groups for each number are tabulated in #ref(<tab:laue-group-numbers>).
@@ -555,6 +568,13 @@ The laue group numbers are between 1 and 17, and the human-readable Laue group i
     ],
   ),
 ) <tab:laue-group-numbers>
+
+The process described above is automated into the command `crysm pets-solve -m <COMPOSITION> PROJECT.pts2`.
+This command copies the `PROJECT_shelx.ins` and `PROJECT_shelx.hkl` files into the `shelx` folder, overwriting any colliding files,
+writes the composition into the `.ins` file, and runs `shelxt` using `-a0.6` and `-l[LAUE GROUP]`.
+It reads the Laue group from the settings that are stored in your `.pts2`-file, so make sure that it is saved,
+and that the "Laue group for scaling" value in the "Finalize integration" step is correct.
+This should be verified by looking at the output from SHELXT.
 
 
 // = Strucure solution in JANA
