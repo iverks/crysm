@@ -1,7 +1,7 @@
 #import "@preview/fletcher:0.5.6" as fletcher: diagram, node, edge
 
 #{
-  let reciprocal_sections = false
+  let reciprocal_sections = true
   let dull_teal = teal.desaturate(10%)
   let step-fill = color.lighten(gray, 60%)
   let step-stroke = color.lighten(gray, 10%)
@@ -46,11 +46,18 @@
         name: <optimize_frame>,
       ),
 
+      edge(<optimize_frame>, ((-1, 0), "|-", <optimize_frame>), ((-1, 0), "|-", <peak_search>), <peak_search>, "-|>"),
+
       if (reciprocal_sections) {
         edge(<unit_cell>, "-|>", auto)
       },
       if (reciprocal_sections) {
-        node((1, 4), [Reciprocal-space sections\ determine the symmetry], name: <reciprocal_space>, ..end-style)
+        node(
+          (1, 4),
+          [Reciprocal-space sections (#ref(<section:reciprocal-space>))\ determine the symmetry],
+          name: <reciprocal_space>,
+          ..end-style,
+        )
       },
       edge(<process_frames>, "-|>", auto, ..repeat-style),
       node((1, 5), [Finalize integration (#ref(<section:finalize-integration>))], name: <finalize_integration>),
@@ -68,18 +75,6 @@
         [Finalize integration (#ref(<section:finalize-integration>))\ *final .hkl files*\ (kinematical + dynamical)],
         name: <finalize_integration_2>,
       ),
-
-      if (reciprocal_sections) {
-        edge("-|>", ..repeat-style)
-      },
-      if (reciprocal_sections) {
-        node(
-          (1, 9),
-          [Reciprocal-space sections\ apply symmetry in reconstruction],
-          name: <reciprocal_space_2>,
-          ..end-style,
-        )
-      },
 
       edge(<peak_search>, "-|>", <tilt_axis>, ..repeat-shift),
       edge(<tilt_axis>, "-|>", <peak_analysis>, ..repeat-shift),

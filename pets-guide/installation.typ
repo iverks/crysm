@@ -1,4 +1,4 @@
-#import "@preview/abbr:0.1.0": a as acr, s as acr_short
+#import "@preview/abbr:0.2.3": a as acr, s as acr_short
 #import "@preview/unify:0.7.1": num, unit, qty
 #import "_frames.typ": note
 
@@ -11,26 +11,39 @@ The data processing procedure consists of two main steps, data reduction and str
 #figure(
   caption: [Tools used in the data processing procedure.],
   table(
-    columns: 2,
-    [Tool], [Purpose],
-    [crysm], [Utility scripts, mainly preprocessing],
-    [PETS], [Data reduction, intensity determination],
-    [edtools], [Creating input file for SHELXT],
-    [SHELXT], [Structure solution],
-    [SHELXL], [Structure refinement],
-    [Olex2], [#acr_short("GUI") for SHELXT and SHELXL],
+    columns: 4,
+    [Tool], [Purpose], [Input], [Output],
+    [crysm], [Utility scripts, mainly preprocessing], [], [],
+    [PETS], [Data reduction, intensity determination], [.pts, .pts2], [.hkl, .ins, .cif_pets],
+    [edtools], [Creating input file for SHELXT], [], [.ins],
+    [SHELXT], [Structure solution], [.ins, .hkl], [.res, .hkl],
+    [SHELXL], [Structure refinement], [.res, .hkl], [],
+    [Olex2], [#acr_short("GUI") for SHELXT and SHELXL], [-], [-],
   ),
 ) <tab:tools>
+
+#figure(
+  caption: [Files],
+  table(
+    columns: 3,
+    [File suffix], [Output from], [Purpose],
+    [.pts], [Instamatic], [PETS input config],
+    [.pts2], [PETS (`ctrl + s`)], [PETS stored state],
+    "<project>_petsdata", [PETS], [PETS stored state],
+    [\_shelx.hkl], [PETS integration], [Input for SHELX],
+    [\_shelx.ins], [PETS integration], [Input for SHELX],
+  ),
+) <tab:files>
 
 
 == PETS
 
-#PETS is a windows only program used for data reduction of #acr("3D ED") data from #acr("CRED") or #acr("PED"), which includes peak searching, refinement of various parameters and integration of intensities.
+#PETS is a windows only program used for data reduction of #acr("3D ED") data from #acr("cRED") or #acr("PED"), which includes peak searching, refinement of various parameters and integration of intensities.
 #PETS can be downloaded from http://pets.fzu.cz/, and requires a registration which is free for academic users.
 
 == SHELX and Olex2
 
-SHELX is a collection of command line executables that can be downloaded from https://shelx.uni-goettingen.de/download.php. Like #PETS and Jana it requires a registration that is free for academic users.
+SHELX #ref(<short_history_of_shelx>)#ref(<shelxt_structure_determination>) is a collection of command line executables that can be downloaded from https://shelx.uni-goettingen.de/download.php. Like #PETS and Jana it requires a registration that is free for academic users.
 Once installed, their location must be added to the PATH.
 Olex2 is a windows only #acr("GUI") for the SHELX programmes, and can be downloaded from https://www.olexsys.org/olex2/.
 

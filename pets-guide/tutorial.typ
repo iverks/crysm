@@ -1,4 +1,4 @@
-#import "@preview/abbr:0.1.0": a as acr
+#import "@preview/abbr:0.2.3": a as acr
 #import "@preview/unify:0.7.1": num, unit, qty, numrange
 #import "@preview/codly:1.3.0": *
 #import "_frames.typ": note
@@ -25,6 +25,7 @@ We call this fixed factor the "correction factor".
 The central four pixels collect electrons from an even larger area, and thus have their intensity increased by another factor.
 This factor we name the "central four factor".
 To correct for these effects we first need to characterize our detector on a flatfield image such as the one shown in #ref(<fig:flatfield-image>).
+A flatfield image is captured by illuminating the entire detector evenly and capturing an image of vacuum, meaning there is nothing inside the field of view.
 
 #figure(
   image("/images/flatfield_200kV_24bit.png", width: 60%),
@@ -36,7 +37,7 @@ To correct for these effects we first need to characterize our detector on a fla
 ) <fig:flatfield-image>
 
 The crysm package contains a script to calculate the correction factors from a flatfield image.
-To run it, we use the command `crysm find-center-cross-correction PATH/TO/flatfield_200kV_24bit.mib`.
+To run it, we use the command `crysm find-center-cross-correction PATH/TO/FLATFIELD_IMAGE.mib`.
 The flatfield image can be a .mib or a .tiff image.
 This calculates the correction factor and the central four factor, and depending on them suggests either two or four additional pixels be added in the center, but ultimately this should be chosen by the analyst. The currently used correction factors are show in #ref(<tab:correction-factors>).
 
@@ -87,10 +88,15 @@ It is recommended to set as many parameters in the config file as possible even 
 
 === lambda
 
-The lambda value is the wavelength of the electrons. Instamatic sets this to a configurable constant. For our setup this is #qty(0.025, "per Angstrom"). The value should be calculated based on the used acceleration voltage. The corresponding wavelengths for some commonly used acceleration voltages are listed in #ref(<tab:wavelengths>).
+The lambda value is the wavelength of the electrons.
+Instamatic sets this to a configurable constant.
+For our setup this is #qty(0.025, "per Angstrom"), which is correct for #qty(200, "kV").
+Be aware that this value is *not* automatically updated when the acceleration voltage is changed.
+The value should be calculated based on the used acceleration voltage.
+The corresponding wavelengths for our selection of acceleration voltages are listed in #ref(<tab:wavelengths>).
 
 #figure(
-  caption: [Wavelengths for common acceleration voltages],
+  caption: [Wavelengths for our selection of acceleration voltages.],
   table(
     columns: (auto, auto),
     [Acceleration voltage [#unit("kV")]], [Wavelength [#unit("per Angstrom")]],
@@ -105,7 +111,9 @@ The Aperpixel value is explained in the section above.
 
 === phi
 
-Phi is the semiangle of a tilt step, meaning it should be half of the tilt step between two images. In the future Instamatic will set this value automatically. When using `crysm` to calibrate angles (next step) it will be overridden. A reasonable value is #qty("0.035", "degree").
+Phi is the semiangle of a tilt step, meaning it should be half of the tilt step between two images.
+In the future Instamatic will set this value automatically.
+When using `crysm` to calibrate angles (next step) it will be overridden. A reasonable value is #qty("0.035", "degree").
 
 === omega
 
@@ -115,11 +123,18 @@ Omega is the rotation axis. It is *not* automatically set by Instamatic. To find
 
 Bin is how many pixels should be binned together. According to the official #PETS documentation, this makes the analysis faster and more robust for images that are larger than 1000x1000 pixels. Since our images are not, we leave it at $1$.
 
+=== reflectionsize
+
+The reflection size is the diameter used of the reflections.
+It should be large enough to encompass strong spots, but not so large that it overlaps with neighboring points.
+An example of correctly sized reflections can be seen in #ref(<fig:laue-circle-movement>), where the sizes of the small green circles are set by the reflectionsize.
+It is fine to leave the reflectionsize as 20 and correct it interactively before running the peak search.
+
 === noiseparameters
 
 Noiseparameters are two numbers. In the #acr("GUI") they are referred to as $G gamma$ and $psi$.
 
-The first number is the expectation value for how many pixels light up per electron hitting the detector. This value should usually be between #numrange("1.3", "1.5"). Finding the value is not simple, but can be done by inspecting flatfield images with very low dose such that single electron impacts are discernible. It should also be discussed with the producer of the detector. The value used for our detector is $1.5$.
+The first number is the expectation value for how many pixels light up per electron hitting the detector. This value should usually be between #numrange("1.3", "1.5"). Finding the value is not simple, but can be done by inspecting flatfield images with very low dose such that single electron impacts are discernible. It should also be discussed with the producer of the detector. The value used for our detector is $1.5$, according to analysis done by Lukas Palatinus.
 
 The second number is the constant noise when no electrons are hitting the detector. For our detector this is simply $0.0$.
 
@@ -191,32 +206,29 @@ If it is only desirable to mask the central four pixels, a beamstop can be creat
 `crysm pets-create-beamstop --image-width 514 --beamstop-width 4 --beamstop-kind square beamstop.xyz`.
 The beam stop files can be reused in other projects with the same image and beamstop widths.
 
-#note[Summary][Crysm commands][#{
-    set par(first-line-indent: 0pt)
-    [
-      Find correction constants\
-      `crysm find-center-cross-correction PATH/TO/flatfield_200kV_24bit.mib`
+#note[Summary][Crysm preprocessing commands][
+  Find correction constants\
+  `crysm find-center-cross-correction PATH/TO/flatfield_200kV_24bit.mib`
 
-      Central cross correct all images in dataset\
-      `crysm pets-correct-central-cross-calibration --additional-pixels 0 --correction-factor 1 --central-four-factor 1 input.mib output.tiff`
+  Central cross correct all images in dataset\
+  `crysm pets-correct-central-cross-calibration --additional-pixels 0 --correction-factor 1 --central-four-factor 1 input.mib output.tiff`
 
-      Central cross correct pixel calibration image\
-      `crysm pets-correct-central-cross-calibration --additional-pixels 2 PATH/TO/INPUT_IMAGE.tiff PATH/TO/OUTPUT_IMAGE.tiff`
+  Central cross correct pixel calibration image\
+  `crysm pets-correct-central-cross-calibration --additional-pixels 2 PATH/TO/INPUT_IMAGE.tiff PATH/TO/OUTPUT_IMAGE.tiff`
 
-      Correct angles in config file\
-      `crysm pets-calibrate-angles`
+  Correct angles in config file\
+  `crysm pets-calibrate-angles`
 
-      Generate beamstop file\
-      `crysm pets-create-beamstop --image-width 516 --beamstop-width 6 --beamstop-kind cross beamstop.xyz`
-    ]
-  }]
+  Generate beamstop file\
+  `crysm pets-create-beamstop --image-width 516 --beamstop-width 6 --beamstop-kind cross beamstop.xyz`
+]
 
 
 
 #pagebreak(weak: true)
 = Data reduction in PETS
 
-Details of the steps in #PETS are presented in the #PETS manual which is recommended as supplementary material #cite(<pets_manual>).
+Details of the steps in #PETS are presented in the #PETS manual, which is recommended supplementary reading #cite(<pets_manual>).
 This manual is meant as a more instructive manual for specifically our workflow.
 An overview of the workflow is presented in #ref(<fig:pets-flowchart>).
 
@@ -226,8 +238,8 @@ An overview of the workflow is presented in #ref(<fig:pets-flowchart>).
 
 Set geometry to continuous rotation.
 Estimate and set reflection diameter, should be a bit smaller than a medium sized peak.
-Verify calibration constant is set to the calibrated value we set in .
-The defaults for the max d\* and min d\* parameters are good.
+Verify calibration constant is set to the calibrated value.
+The defaults for the parameters: max d\* for integration, max d\* for peak search and min d\* of $1.4$, $1.4$ and $0.05$ are fine.
 The detector noise parameters should be set from #ref(<section:setting-pts-params>).
 For 12 bit datasets the detector saturation limit should be set to #num("4095"). For 24 bit the saturation limit should be set as high as possible, which is #num("2 000 000 000").
 
@@ -249,7 +261,7 @@ The saved dead pixel files can be reused in other projects with the same image w
 == Peak search <section:peak-search>
 
 When doing the peak search, we have had better success using the direct beam for center determination than with the friedel pairs. According to the creator of #PETS, using the direct bean introduces a bias, while using friedel pairs introduces noise.
-Sometimes increasing the I/sigma ratio to $15$ or $20$ is a good way to filter out noise if there are too many peaks detected. If too few peaks are detected it can be reduced to $5$ or $3$. Usually, leaving it at the default value of $10$ is fine for #acr("CRED") data.
+Sometimes increasing the I/sigma ratio to $15$ or $20$ is a good way to filter out noise if there are too many peaks detected. If too few peaks are detected it can be reduced to $5$ or $3$. Usually, leaving it at the default value of $10$ is fine for #acr("cRED") data.
 On the second run, the center determination should be set to "Use saved centers" to use the centers found in "Optimize frame geometry".
 
 #note[Possible issue][The direct beam is in the central cross][
@@ -258,6 +270,34 @@ On the second run, the center determination should be set to "Use saved centers"
 == Tilt axis <section:tilt-axis>
 
 The initial $omega$ angle should already be set to an initial estimate from #ref(<section:setting-pts-params>). Run the step without enabling "Global search for tilt axis position $omega$". Usually enabling the optimization of the $delta$ angle leads to worse results. Note that the $delta$ angle is refined on a frame by frame basis in #ref(<section:frame-geometry>).
+
+#note[Help][Finding an initial guess for the tilt axis][
+  // TODO: figur
+
+  In #ref(<fig:laue-circle-movement>) we can see three equally spaced frames from the Mordenite 1 dataset.
+  We can see the Laue circle, the intersection between a layer of the reciprocal crystal and the Ewald sphere, moving across the image.
+  This should be present in most data sets, but not all, and the distance of the path from the origin might vary depending on the crystal orientation.
+
+
+
+  The green lines for the tilt axis can be enabled by checking "Resolution rings, tilt axis and ice rings" in the "Image options" tab of the right window.
+  The found peaks are marked with green rings when "Peak search" right below is checked and a peak search has been run.
+
+  When looking through the images, you will see some frames where a circle can be traced.
+  The rotation axis should be orthogonal to the direction of movement of the center of the circle.
+
+  The rotation axis (green double lines in all images). Should be
+
+  #figure(
+    image("/images/rotation_axis/laue_circle_moving.png"),
+    caption: [Three equidistant frames from the Mordenite 1 dataset.
+      The found peaks are marked by small green rings and the rotation axis by a double line.
+      Edited onto the image is an estimation of the Laue circle (red ring) and its center (red dot).
+      In the last frame (c) the Laue circle centers of the other frames are marked by transparent red dots.
+      The path of the center of the Laue circle is marked with a red dashed line.],
+  ) <fig:laue-circle-movement>
+
+]
 
 #note[Possible issue][The tilt axis is unknown][
   If the tilt axis is unknown and can't be guessed from observing the path of the Ewald sphere over the images, "Global search for tilt axis position $omega$" can be enabled.
@@ -293,6 +333,7 @@ Finally, click "Peak analysis (continue)" to finish the step. This step creates 
 
 == Find unit cell and orientation matrix <section:unit-cell>
 
+Open the reconstruction by clicking "Find unit cell and orientation matrix".
 Click find possible cells automatically.
 If no cell is found, try to change the data used for indexing to "diff", the difference space.
 If the issue persists, change back to "xyz" and select "from triplets" in the "Find possible cells automatically" section.
@@ -316,9 +357,9 @@ If the found cell is incorrect we can try to modify the cell. Do however note th
 
   Navigate to a high-symmetry direction, and rotate so that the grid is aligned to the x and y-axes. The histograms on the bottom and left should be as sharp as possible.
   Click the "Define directions" button to start. First, place the cursor on a point on the same row as the origin point.
-  Make sure that the "order" is properly detected and set to the number of intervals your line spans, as shown #ref(<fig:find-cell-manually>).
+  Make sure that the "order" is properly detected and set to the number of intervals your line spans, as shown in #ref(<fig:find-cell-manually>).
   Then check the "b" radio button, and place the cursor on a point on the same column as the origin point.
-  Finally click the "a" button under "View along direction", and draw the last line such that all angles are #qty("90", "degree").
+  Finally click the "a" button under "View along direction", and draw the last line such that all angles are #qty(90, "degree").
   The cell does not need to be perfect as it will be refined.
 
   #figure(
@@ -350,9 +391,51 @@ If at this point some frames or ranges of frames have been deemed to be bad, for
   image("images/mor2/Uncheck_from_calculation.png", width: 60%),
 ) <fig:remove-range-from-calculation>
 
+== Reciprocal space sections <section:reciprocal-space>
+
+In the reciprocal space sections, we can specify the space group by comparing the reflection conditions/extinction rules to the tables.
+This section might not be necessary as SHELX finds the space group automatically, but can be done to increase our certainty or confirm a suspicion without solving the structure.
+
+Clicking the "Reciprocal-space sections" button creates a set of images of the reciprocal space planes.
+Applying symmetry in the reconstruction helps completeness of the images, but might be a false safety net.
+In the reciprocal space sections, the planes of where one of $h, k, l$ is set to one of $0, 1, 2$.
+Comparing with the tables in IUCr vol A tables #cite(<international_tables_crystallography>).
+The tables are available digitally at https://onlinelibrary.wiley.com/iucr/itc/Ac/ch1o6v0001/sec1o6o5.pdf.
+
+#figure(
+  image("/images/extinction_rules_reciprocal_sections.png", width: 60%),
+  caption: [The $h k 0$ plane for Mordenite (Cmcm) has the reflection condition $h+k$,
+    which can be seen by the missing reflections at $h = 3, k = 0$, $h = 4, k = 1$, $h = 5, k = 2$ etc.
+    The grid is enabled with the "gr" button.
+  ],
+) <fig:reciprocal-space-sections-image>
+
+#note[Possible issue][The reciprocal images are hard to read][
+  Sometimes, the peaks in the generated reciprocal space images are very big, like the $h = 8, k = 0$ peak or the direct beam in #ref(<fig:reciprocal-space-sections-image>).
+  If too many of the peaks are like this, the image is impossible to interpret.
+  To avoid this issue, this step can be done manually in the 3D reconstruction instead.
+
+  First, open the reconstruction by clicking "Find unit cell and orientation matrix".
+  Use the buttons on the right labeled "a\*", "b\*" and "c\*" to align the reconstruction with the lattice.
+  Use the "rectangle area selection" tool to select a plane, and the mentioned buttons to orient the view directly above the plane.
+  Enable the lattice by checking "Show lattice", and grow it in the in-plane directions using the number inputs to the right of "Fold to cell".
+  The lattice might obscure the points, but this can be avoided by toggling it off again.
+
+  #figure(
+    image("/images/extinction_rules.png"),
+    caption: [The $h k 0$ plane for Mordenite (Cmcm) has the reflection condition $h+k$.
+      Here, the reflections have been highlighted using "Show reflections",
+      and the space is folded to 4 by 4 unit cells to get a higher density of points for illustrative purposes.
+    ],
+  )
+]
+
 == Process frames for integration <section:process-frames>
 
-When processing frames, always use the "Fit profile" intensity determination method. The values "Rocking curve width" and "Apparent mosaicity" are shared with the next sections. For the first run they should already be set to reasonable values. The rocking curve width default of $0.001$ is good, and the apparent mosaicity default of $0.1$ is good.
+When processing frames, always use the "Fit profile" intensity determination method.
+The values "Rocking curve width" and "Apparent mosaicity" are shared between "Process frames", "Optimize reflection profile" and "Optimize frame geometry".
+For the first run they should already be set to reasonable values.
+The rocking curve width default of $0.001$ is good, and the apparent mosaicity default of $0.1$ is good.
 
 == Optimize reflection profile <section:optimize-profile>
 

@@ -1,4 +1,4 @@
-#import "@preview/abbr:0.1.0": a as acr
+#import "@preview/abbr:0.2.3": a as acr
 #import "@preview/unify:0.7.1": num, unit, qty
 
 #let PETS = acr("PETS")
@@ -10,3 +10,4 @@ For structure refinement we refer to the previous manual whose original version 
 An updated version is available
 // in the private repository https://github.com/TEM-Gemini-Centre/developments.
 at https://github.com/TEM-Gemini-Centre/developments/blob/main/cRED/3D%20ED%20data%20processing/User%20manual%203D%20ED%20data%20processing%20NTNU.pdf.
+For access to the private repository contact Emil F. Christiansen.

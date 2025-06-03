@@ -1,16 +1,15 @@
-#import "@preview/acrostiche:0.4.1": *
 #import "@preview/cetz:0.3.0"
 #import "@preview/codly:1.3.0": *
 #import "@preview/physica:0.9.3": *
 #import "@preview/subpar:0.2.0": grid
 #import "figure-numbering.typ": figure_numbering
-#import "@preview/abbr:0.1.0": make as init-acronyms, list as print-index, a as acr, style
+#import "@preview/abbr:0.2.3": make as init-acronyms, list as print-index, a as acr, config
 #import "_frames.typ": *
 #show: frame-style(styles.boxy)
 
 #set document(title: "Reduction of cRED data for structure solution")
 #set page(margin: 1.25in)
-#set par(spacing: 1.2em, leading: 0.55em, first-line-indent: 1.8em, justify: false)
+#set par(spacing: 1.2em, leading: 0.55em, first-line-indent: 0.0em, justify: false)
 #set text(font: "New Computer Modern")
 #show raw: set text(font: ("MesloLGS NF", "Consolas"))
 #show heading: set block(above: 1.4em, below: 1em)
@@ -107,12 +106,12 @@
   }
 }
 
-#style(x => x)
+#config(style: x => x)
 
 #init-acronyms(
   ("3D ED", "3D Electron Diffraction"),
   ("CCTBX", "Computational Crystallography Toolbox (software)"),
-  ("CRED", "Continuous Rotation Electron Diffraction"),
+  ("cRED", "Continuous Rotation Electron Diffraction"),
   ("CTEM", "Conventional TEM"),
   ("ED", "Electron Diffraction"),
   ("FEG", "Field Emission Gun"),
