@@ -90,9 +90,7 @@ def correct_center_cross_image(
     )
 
     with out_file.open("wb") as handle:
-        tf.imwrite(
-            handle, out_img, compression="zlib", software="crysm", description=header
-        )
+        tf.imwrite(handle, out_img, software="crysm", description=header)
 
 
 def correct_center_cross(
