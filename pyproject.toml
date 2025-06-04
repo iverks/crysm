@@ -1,6 +1,6 @@
 [project]
 name = "crysm"
-version = "0.1.4"
+version = "1.0.0"
 description = "Continuous rotation electron diffraction (cRED) data analysis helper cli"
 readme = "README.md"
 requires-python = ">=3.10"
