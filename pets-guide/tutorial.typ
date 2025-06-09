@@ -10,8 +10,7 @@
 
 == Correcting for the central cross <section:central-cross-correction>
 
-
-The electron detector of our #acr("TEM") consists of four subdetectors as shown in #ref(<fig:detector-gap>) a).
+The QuantumDetectors Merlin 4R electron detector of our JEOL ARM200F #acr("TEM") consists of four subdetectors as shown in #ref(<fig:detector-gap>) a).
 These subdetectors are separated from each other by a small gap.
 This gap is on the scale of a few pixels.
 We need to correct for this both in our calibration images and in the data used for reconstruction.
@@ -19,8 +18,8 @@ We need to correct for this both in our calibration images and in the data used 
 #include "figures/fig-detector-gap.typ"
 // #include "figures/fig-detector-gap-geometry.typ"
 
-In addition, electrons that hit this gap are detected by the nearby detectors with a certain probability, effectively increasing their intensity by a fixed factor.
-This is what gives rise to the characteristic bright cross.
+In addition, electrons that hit this gap are detected by the nearby pixels with a certain probability, effectively increasing their intensity by a fixed factor.
+This is what gives rise to the characteristic bright cross in the raw images.
 We call this fixed factor the "correction factor".
 The central four pixels collect electrons from an even larger area, and thus have their intensity increased by another factor.
 This factor we name the "central four factor".
@@ -30,7 +29,7 @@ A flatfield image is captured by illuminating the entire detector evenly and cap
 #figure(
   image("/images/flatfield_200kV_24bit.png", width: 60%),
   caption: [
-    Example flatfield image. Here we can see the dead pixels some black and some white.
+    Example flatfield image.
     The central cross is brighter than the average pixel.
     The central four pixels are even brighter.
   ],
@@ -58,7 +57,7 @@ using the previously determined values. This generates a new folder `tiff_corr` 
 
 == Calibration of pixel size <section:calibration>
 
-Finding the correct pixel size, in #PETS referred to as "aperpixel", is essential. The parameter tells us how many inverse Ångström in reciprocal space each pixel in the image represents. It requires some knowledge of crystallography and the dedicated sample, so it is recommended to get help with this the first time, and its details are thus not covered in this manual.
+Finding the correct pixel size, in #PETS referred to as "Aperpixel", is essential. The parameter tells us how many inverse Ångström in reciprocal space each pixel in the image represents. It requires some knowledge of crystallography and the dedicated sample, so it is recommended to get help with this the first time, and its details are thus not covered in this manual.
 
 The calibration of pixel size depends on the chosen number of additional pixels when correcting for the central cross. In order to create a widened calibration image we can use the command
 `crysm pets-correct-central-cross-calibration --additional-pixels 2 PATH/TO/INPUT_IMAGE.tiff PATH/TO/OUTPUT_IMAGE.tiff`. The input image can be either .tiff or .mib, but the output must be .tiff.
@@ -72,10 +71,10 @@ The calibration of pixel size depends on the chosen number of additional pixels 
 The used calibration values as of writing this are presented in #ref(<tab:calibration-values>).
 
 #figure(
-  caption: [Pixel size calibration values for the acceleration voltage of #qty("200", "kV") used as of 01.05.2025.],
+  caption: [Pixel size calibration values for the acceleration voltage of #qty("200", "kV") used for three different camera lengths as of 01.05.2025.],
   table(
     columns: 4,
-    [Gap correction], [120cm], [150cm], [200cm],
+    [Gap correction], qty(120, "cm"), qty(150, "cm"), qty(200, "cm"),
     [Not corrected], [0.010207], [0.007929], [0.006167],
     [Corrected 2px], [-], [0.007859], [0.006062],
     [Corrected 4px], [-], [0.007682], [-],
@@ -84,7 +83,10 @@ The used calibration values as of writing this are presented in #ref(<tab:calibr
 
 == Setting Aperpixel and other constants in the .pts file <section:setting-pts-params>
 
-It is recommended to set as many parameters in the config file as possible even though they often are settable in the graphical user interface. This is to save time when restarting the analysis if anything happens to the project. The frame scale should be set to the value calculated above. Remember that the calibration constant is different when correcting for the central cross widening than when not doing it.
+It is recommended to set as many parameters in the initial config file as possible even though they often are possible to override through the graphical user interface.
+This is to save time whenever the analysis has to be restarted.
+The frame scale should be set to the value calculated above.
+Remember that the calibration constant is different when correcting for the central cross widening than when not doing it.
 
 === lambda
 
@@ -99,7 +101,7 @@ The corresponding wavelengths for our selection of acceleration voltages are lis
   caption: [Wavelengths for our selection of acceleration voltages.],
   table(
     columns: (auto, auto),
-    [Acceleration voltage [#unit("kV")]], [Wavelength [#unit("per Angstrom")]],
+    [Acceleration voltage [kV]], [Wavelength [$"Å"^(-1)$]],
     [80], [0.041757],
     [200], [0.025079],
   ),
@@ -107,17 +109,25 @@ The corresponding wavelengths for our selection of acceleration voltages are lis
 
 === Aperpixel
 
-The Aperpixel value is explained in the section above.
+The Aperpixel value is the size of the pixel in reciprocal space in $"Å"^(-1)$.
+It should be set according to the calibration as explained in #ref(<section:calibration>) above.
 
 === phi
 
 Phi is the semiangle of a tilt step, meaning it should be half of the tilt step between two images.
-In the future Instamatic will set this value automatically.
+Starting from Instamatic v2.1.1 this value will be set automatically.
 When using `crysm` to calibrate angles (next step) it will be overridden. A reasonable value is #qty("0.035", "degree").
 
 === omega
 
-Omega is the rotation axis. It is *not* automatically set by Instamatic. To find it we need to inspect the images and observe which axis the Ewald sphere moves across. Only an approximate value is needed as #PETS does a good job of refining it. The value should be the same across experiments. If it is not known yet, it can be found at a later step. A reasonable value is #qty("232", "degree").
+Omega is the rotation axis, defined equally to the angle on the unit circle.
+Even if it ends up being the same axis, the direction seems to matter somehow, e.g. $90 degree != 270 degree$.
+It is *not* automatically set by Instamatic.
+To find it we need to inspect the images and observe which axis the Ewald sphere moves across.
+Only an approximate value is needed as #PETS does a good job of refining it.
+The value should be the same across experiments.
+If it is not known yet, it can be found at a later step in the process.
+A reasonable value is #qty("232", "degree").
 
 === bin
 
@@ -134,9 +144,13 @@ It is fine to leave the reflectionsize as 20 and correct it interactively before
 
 Noiseparameters are two numbers. In the #acr("GUI") they are referred to as $G gamma$ and $psi$.
 
-The first number is the expectation value for how many pixels light up per electron hitting the detector. This value should usually be between #numrange("1.3", "1.5"). Finding the value is not simple, but can be done by inspecting flatfield images with very low dose such that single electron impacts are discernible. It should also be discussed with the producer of the detector. The value used for our detector is $1.5$, according to analysis done by Lukas Palatinus.
+The first number, $G gamma$, is the expectation value for how many pixels light up per electron hitting the detector.
+This value should usually be between #numrange("1.3", "1.5").
+Finding the value is not simple, but can be done by inspecting flatfield images with very low dose such that single electron impacts are discernible.
+It should be further discussed with the producer of the detector.
+The value used for our detector is $1.5$, according to analysis done by Lukas Palatinus, May 2025.
 
-The second number is the constant noise when no electrons are hitting the detector. For our detector this is simply $0.0$.
+The second number, $psi$, is the constant noise when no electrons are hitting the detector. For our detector this is simply $0.0$.
 
 After setting the parameters, the file should look something like this:
 
@@ -173,7 +187,9 @@ This generates a new input file `pets-fromtime.pts` where the orientation angle 
 
 == Use the central cross corrected images <section:use-corrected-images>
 
-The #PETS config file must be modified to use the central cross corrected images generated in #ref(<section:central-cross-correction>). Using the multiline editing capabilities of your text editor, add change the image path of all images from `tiff/*.tiff` to `tiff_corr/*tiff`. In VSCode or Notepad++ this can be done by placing the cursor on the first line of the image list, scrolling to the bottom of the file and clicking the last line of the image list while holding *SHIFT* and *ALT*.
+The #PETS config file must be modified to use the central cross corrected images generated in #ref(<section:central-cross-correction>). Using the multiline editing capabilities of your text editor, add change the image path of all images from `tiff/*.tiff` to `tiff_corr/*tiff`.
+In VSCode or Notepad++ this can be done by placing the cursor on the first line of the image list, scrolling to the bottom of the file and clicking the last line of the image list while holding *SHIFT* and *ALT*.
+The file should then look something like:
 
 #block(breakable: false)[
   ```properties
@@ -196,9 +212,9 @@ The #PETS config file must be modified to use the central cross corrected images
   ```
 ]
 
-== Generate a beamstop-file <section:generate-beamstop>
+== Generate a beamstop-file for the central cross <section:generate-beamstop>
 
-When using central cross correction #ref(<section:central-cross-correction>), a beam stop should not be necessary.
+When using central cross correction #ref(<section:central-cross-correction>), a beam stop for the central cross should not be necessary.
 If a beam stop mask is to be used anyways for the central cross, it can be created with `crysm` using the command `crysm pets-create-beamstop`.
 The command takes two parameters, image width and beamstop width. The image width is the width of the image after being corrected for the central cross. If using no additional pixels this is usually 512, and with an additional pixels value of 2 it becomes 514. The beamstop width is up to the user.
 The command is then `crysm pets-create-beamstop --image-width 514 --beamstop-width 6 beamstop.xyz`.
@@ -222,7 +238,6 @@ The beam stop files can be reused in other projects with the same image and beam
   Generate beamstop file\
   `crysm pets-create-beamstop --image-width 516 --beamstop-width 6 --beamstop-kind cross beamstop.xyz`
 ]
-
 
 
 #pagebreak(weak: true)
@@ -260,9 +275,11 @@ The saved dead pixel files can be reused in other projects with the same image w
 
 == Peak search <section:peak-search>
 
-When doing the peak search, we have had better success using the direct beam for center determination than with the friedel pairs. According to the creator of #PETS, using the direct bean introduces a bias, while using friedel pairs introduces noise.
-Sometimes increasing the I/sigma ratio to $15$ or $20$ is a good way to filter out noise if there are too many peaks detected. If too few peaks are detected it can be reduced to $5$ or $3$. Usually, leaving it at the default value of $10$ is fine for #acr("cRED") data.
-On the second run, the center determination should be set to "Use saved centers" to use the centers found in "Optimize frame geometry".
+When doing the peak search, we have generally had better success using the direct beam for center determination than with the friedel pairs.
+According to the creator of #PETS, using the direct bean introduces a bias, while using friedel pairs introduces noise.
+Sometimes increasing the I/sigma ratio to $15$ or $20$ is a good way to filter out noise if there are too many peaks detected. If too few peaks are detected it can be reduced to $5$ or $3$.
+Usually, leaving it at the default value of $10$ is fine for #acr("cRED") data.
+On the second run (red arrows in #ref(<fig:pets-flowchart>)), the center determination should be set to "Use saved centers" to use the centers found in "Optimize frame geometry".
 
 #note[Possible issue][The direct beam is in the central cross][
   If the direct beam is in the central cross, proceed by using the friedel pairs method. Then after finding the unit cell, run "Optimize frame geometry" with only "Frame orientation angles" and "Center of the diffraction patterns" enabled. Finally, rerun the peak search step using "Use saved centers".
@@ -272,7 +289,7 @@ On the second run, the center determination should be set to "Use saved centers"
 The initial $omega$ angle should already be set to an initial estimate from #ref(<section:setting-pts-params>). Run the step without enabling "Global search for tilt axis position $omega$". Usually enabling the optimization of the $delta$ angle leads to worse results. Note that the $delta$ angle is refined on a frame by frame basis in #ref(<section:frame-geometry>).
 
 #note[Help][Finding an initial guess for the tilt axis][
-  In #ref(<fig:laue-circle-movement>) we can see three equally spaced frames from the Mordenite 1 dataset.
+  In #ref(<fig:laue-circle-movement>) we can see three equally spaced frames from a reference dataset.
   We can see the Laue circle, the intersection between a layer of the reciprocal crystal and the Ewald sphere, moving across the image.
   This should be present in most data sets, but not all, and the distance of the path from the origin might vary depending on the crystal orientation.
   The center of the Laue circle can be traced across the dataset.
@@ -315,7 +332,7 @@ We expect the red curve to have several distinct steps, and thus the green to ha
     #image("/images/mor2/Peak_analysis__3D_distances.png")
     b)
   ],
-  caption: [a) In plane distances. b) 3D distances.],
+  caption: [a) In-plane distances. b) 3D distances.],
 )
 
 Next, after clicking "Peak analysis (continue)" the same plot is presented, but for distances in the constructed 3D reciprocal space.
@@ -334,7 +351,7 @@ Open the reconstruction by clicking "Find unit cell and orientation matrix".
 Click find possible cells automatically.
 If no cell is found, try to change the data used for indexing to "diff", the difference space.
 If the issue persists, change back to "xyz" and select "from triplets" in the "Find possible cells automatically" section.
-Finally if the issue still persists use "diff" and "from triplets".
+Finally, if the issue still persists use "diff" and "from triplets".
 If the found cell is incorrect we can try to modify the cell. Do however note that this is a sign that the data quality is low.
 
 #note[Possible issue][The unit cell vectors are too long][
@@ -354,14 +371,17 @@ If the found cell is incorrect we can try to modify the cell. Do however note th
 
   Navigate to a high-symmetry direction, and rotate so that the grid is aligned to the x and y-axes. The histograms on the bottom and left should be as sharp as possible.
   Click the "Define directions" button to start. First, place the cursor on a point on the same row as the origin point.
-  Make sure that the "order" is properly detected and set to the number of intervals your line spans, as shown in #ref(<fig:find-cell-manually>).
+  Make sure that the "order" is properly detected as the number of intervals your line spans, as shown in #ref(<fig:find-cell-manually>), otherwise set it or retry.
   Then check the "b" radio button, and place the cursor on a point on the same column as the origin point.
-  Finally click the "a" button under "View along direction", and draw the last line such that all angles are #qty(90, "degree").
+  Finally, click the "a" button under "View along direction", and draw the last line such that all angles are #qty(90, "degree").
   The cell does not need to be perfect as it will be refined.
 
   #figure(
     image("images/mor2/Find_cell_manually.png", width: 80%),
-    caption: [When finding the cell manually, we draw a direction vector and make sure the order value is equal to the count of intervals spanned by the vector.],
+    caption: [Screenshot of finding the cell manually.
+      Here the number of intervals spanned is 5, seen by the 6 red dots representing the different planes.
+      The order is properly set to 5 for the a direction.
+    ],
   ) <fig:find-cell-manually>
 ]
 
@@ -459,7 +479,10 @@ After running, make sure the detected Laue class for scaling is correct.
 
 Once the process is mastered, it can be sped up using the automatic workflow. I prefer finding and refining the unit cell manually and then running the rest of the steps automatically.
 
+#pagebreak(weak: true)
 = Structure solution in Olex2 + SHELX
+
+== With edtools
 
 Copy the file `<jobname>_shelx.hkl` into a new folder "shelx". Run the terminal command:
 

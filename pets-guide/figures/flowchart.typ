@@ -42,7 +42,10 @@
       edge("-|>"),
       node(
         (0, 7),
-        [Optimize frame geometry: (#ref(<section:frame-geometry>))\ -uniform intensity method\ -$alpha$, $beta$, $omega$, center],
+        [Optimize frame geometry: (#ref(<section:frame-geometry>))\
+          -uniform intensity method\
+          // -$alpha$, $beta$, $omega$, center
+        ],
         name: <optimize_frame>,
       ),
 
@@ -64,7 +67,10 @@
       edge("-|>", ..repeat-style),
       node(
         (1, 6),
-        [Optimize frame geometry: (#ref(<section:frame-geometry>))\ -integrated intensity method\ -$alpha$, $beta$, $omega$, center],
+        [Optimize frame geometry: (#ref(<section:frame-geometry>))\
+          -integrated intensity method\
+          //-$alpha$, $beta$, $omega$, center
+        ],
         name: <optimize_frame_2>,
       ),
       edge("-|>", ..repeat-style),
@@ -92,6 +98,8 @@
         label-pos: 1.1,
       ),
     ),
-    caption: [Adapted from section C of the PETS manual #cite(<pets_manual>).],
+    caption: [Overview schematic of the PETS workflow.
+      Adapted from section C of the PETS manual #cite(<pets_manual>).
+    ],
   )
 } <fig:pets-flowchart>

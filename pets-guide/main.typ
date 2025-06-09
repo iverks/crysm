@@ -163,5 +163,5 @@
 #pagebreak(weak: true)
 
 #show bibliography: set heading(outlined: false)
-#bibliography("pets_bibliography.bib", style: "iso-690-numeric")
+#bibliography("pets_bibliography.bib", style: "elsevier-with-titles")
 #pagebreak(weak: true)
