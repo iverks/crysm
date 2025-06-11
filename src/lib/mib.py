@@ -5,6 +5,7 @@ from typing import List
 import numpy as np
 
 
+# Adapted from https://github.com/instamatic-dev/instamatic/blob/main/src/instamatic/camera/merlin_io.py
 class MIBProperties:
     """Class covering Merlin MIB file properties."""
 

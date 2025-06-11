@@ -120,7 +120,7 @@ When using `crysm` to calibrate angles (next step) it will be overridden. A reas
 
 === omega
 
-Omega is the rotation axis, defined equally to the angle on the unit circle.
+Omega is the rotation axis in the image plane, defined likewise to the angles on the unit circle where $0 degree$ is directly to the right.
 Even if it ends up being the same axis, the direction seems to matter somehow, e.g. $90 degree != 270 degree$.
 It is *not* automatically set by Instamatic.
 To find it we need to inspect the images and observe which axis the Ewald sphere moves across.
@@ -212,6 +212,15 @@ The file should then look something like:
   ```
 ]
 
+#note[Hint][Using the corrected images in XDS][
+  The central cross corrected images can also be used in XDS.
+  This is done by setting the `NAME_TEMPLATE_OF_DATA_FRAMES` to the correct pattern, and setting the image format to `TIFF`.
+
+  ```env
+  NAME_TEMPLATE_OF_DATA_FRAMES= ../tiff_corr/0????.tiff   TIFF
+  ```
+]
+
 == Generate a beamstop-file for the central cross <section:generate-beamstop>
 
 When using central cross correction #ref(<section:central-cross-correction>), a beam stop for the central cross should not be necessary.
@@ -260,13 +269,18 @@ For 12 bit datasets the detector saturation limit should be set to #num("4095").
 
 If a beamstop was generated in #ref(<section:generate-beamstop>), it should be loaded at this point by clicking "Yes" and "Load" and selecting the given file.
 
-Click on "Detect" to detect bad pixels. It usually detects $82$, missing around $25$. If some pixels go undetected, they can be added using `crysm`. First export the pixels from the #acr("GUI") to a file `dead_pixels.txt`.
+Click on "Detect" to detect bad pixels.
+It usually detects $82$.
+Usually, some pixels go undetected, and should be added manually using `crysm`.
+First export the pixels from the #PETS #acr("GUI") to a file `dead_pixels.txt`.
 Then run the command
 `crysm mark-dead-pixels --dead-pixels dead_pixels.txt tiff_corr/00001.tiff`.
 This loads the dead pixels from the file and the image `tiff_corr/00001.tiff`. To toggle a dead pixel, double click the pixel in the image.
 To verify that the pixel really is dead, you can scroll through the images using the buttons "d" (aDvance) and "a" (bAck).
 Closing the window saves the modifications to the opened file automatically.
-The saved dead pixel files can be reused in other projects with the same image width.
+Then load the pixels into #PETS by clicking the "Import" button.
+After manual intervention, the dead pixel count should be around $110$.
+The saved dead pixel files can be reused in other projects with the same detector and gap correction width.
 
 #figure(
   image("images/crysm_marking_dead_pixels.png", width: 60%),
@@ -362,8 +376,6 @@ If the found cell is incorrect we can try to modify the cell. Do however note th
     caption: [The unit vector might be too long.],
   ) <fig:go-to-supercell>
 ]
-
-
 
 #note[Possible issue][Cannot find unit cell][
   If the unit cell cannot be found by automatic means it is possible to define it manually.
