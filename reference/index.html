@@ -1,0 +1,835 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://iverks.github.io/crysm/reference/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../cred_guide.pdf">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Reference - crysm</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="deep-orange" data-md-color-accent="green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#crysm" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="crysm" class="md-header__button md-logo" aria-label="crysm" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            crysm
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="crysm" class="md-nav__button md-logo" aria-label="crysm" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    crysm
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Crysm
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-calibrate-angles" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-calibrate-angles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-find-center-cross-correction" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm find-center-cross-correction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-correct-center-cross" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-correct-center-cross
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-correct-center-cross-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-correct-center-cross-calibration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-mark-dead-pixels" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-mark-dead-pixels
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-create-beamstop" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-create-beamstop
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-solve" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-solve
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-xds-calibrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm xds-calibrate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-compare-hkl" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm compare-hkl
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-plot-hkl" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm plot-hkl
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-plot-camel" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm plot-camel
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cred_guide.pdf" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PDF guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-calibrate-angles" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-calibrate-angles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-find-center-cross-correction" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm find-center-cross-correction
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-correct-center-cross" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-correct-center-cross
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-correct-center-cross-calibration" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-correct-center-cross-calibration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-mark-dead-pixels" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-mark-dead-pixels
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-create-beamstop" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-create-beamstop
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-pets-solve" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm pets-solve
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-xds-calibrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm xds-calibrate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-compare-hkl" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm compare-hkl
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-plot-hkl" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm plot-hkl
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#crysm-plot-camel" class="md-nav__link">
+    <span class="md-ellipsis">
+      crysm plot-camel
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<div class="typer-docs">
+<h1 id="crysm"><code>crysm</code></h1>
+<p>Collection of scripts for CRED. PETS specific commands are prefixed by <code>pets-</code>, XDS specific commands by <code>xds-</code></p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm [OPTIONS] COMMAND [ARGS]...</code></p>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--install-completion</code>: Install completion for the current shell.</li>
+<li><code>--show-completion</code>: Show completion for the current shell, to copy it or customize the installation.</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<p><strong>Commands</strong>:</p>
+<ul>
+<li><code>pets-calibrate-angles</code>: Calibrate the angle of each image based on...</li>
+<li><code>find-center-cross-correction</code>: Find central cross intensity correction...</li>
+<li><code>pets-correct-center-cross</code>: Correct central cross of a dataset given...</li>
+<li><code>pets-correct-center-cross-calibration</code>: Correct the center cross of a single...</li>
+<li><code>pets-mark-dead-pixels</code>: Open an interactive matplotlib window to...</li>
+<li><code>pets-create-beamstop</code>: Create a beamstop</li>
+<li><code>pets-solve</code>: Runs SHELXT on the given project using the...</li>
+<li><code>xds-calibrate</code>: Print lines to add to XDS.INP to correct...</li>
+<li><code>compare-hkl</code>: Compare the indexed reflections in...</li>
+<li><code>plot-hkl</code>: Plot the distribution of indexed peaks in...</li>
+<li><code>plot-camel</code>: Plot the rocking curve from a .cml-file</li>
+</ul>
+<h2 id="crysm-pets-calibrate-angles"><code>crysm pets-calibrate-angles</code></h2>
+<p>Calibrate the angle of each image based on the timestamps in their metadata.
+Generates</p>
+<p>Example usage: <code>crysm pets-calibrate-angles</code></p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm pets-calibrate-angles [OPTIONS]</code></p>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--range FLOAT</code>: Estimaged percentage of total angle range really spanned  [default: 100]</li>
+<li><code>--skip / --no-skip</code>: Skip first frame after defocus  [default: no-skip]</li>
+<li><code>--plot / --no-plot</code>: Plot timestep histogram  [default: no-plot]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="crysm-find-center-cross-correction"><code>crysm find-center-cross-correction</code></h2>
+<p>Find central cross intensity correction factor from a flatfield image.
+Supported formats are .tiff or .mib</p>
+<p>Example usage: <code>crysm finc-center-cross-correction flatfield.mib</code></p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm find-center-cross-correction [OPTIONS] FLATFIELD_IMAGES...</code></p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>FLATFIELD_IMAGES...</code>: Flatfield images to use for calibration  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="crysm-pets-correct-center-cross"><code>crysm pets-correct-center-cross</code></h2>
+<p>Correct central cross of a dataset given the intensity
+correction factor and the number of pixels in the gap.</p>
+<p>Example usage: <code>crysm pets-correct-center-cross --additional-pixels 2
+--correction-factor 2.196 --central-four-factor 4.051</code></p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm pets-correct-center-cross [OPTIONS]</code></p>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-a, --additional-pixels INTEGER</code>: How many pixels should be added to thecenter to correct the geometry of the images.  [required]</li>
+<li><code>-c, --correction-factor FLOAT</code>: How much more intense a center cross pixel is than a regular pixel  [required]</li>
+<li><code>-C, --central-four-factor FLOAT</code>: How much more intense the four central pixels are than a regular pixel  [required]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="crysm-pets-correct-center-cross-calibration"><code>crysm pets-correct-center-cross-calibration</code></h2>
+<p>Correct the center cross of a single image, used for correcting calibration images.</p>
+<p>Example usage: <code>crysm pets-correct-center-cross-calibration --additional-pixels 2
+flatfield.mib flatfield_2px_corrected.tiff</code></p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm pets-correct-center-cross-calibration [OPTIONS] INPUT OUTPUT</code></p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>INPUT</code>: Input image  [required]</li>
+<li><code>OUTPUT</code>: Output image  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--additional-pixels INTEGER</code>: How many pixels should be added to thecenter to correct the geometry of the images.  [required]</li>
+<li><code>--correction-factor FLOAT</code>: How much more intense a center cross pixel is than a regular pixel</li>
+<li><code>--central-four-factor FLOAT</code>: How much more intense the four central pixels are than a regular pixel</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="crysm-pets-mark-dead-pixels"><code>crysm pets-mark-dead-pixels</code></h2>
+<p>Open an interactive matplotlib window to mark pixels as dead.
+Double click to mark a pixel as dead.
+Use "a" and "d" as arrow keys to rotate through the dataset.</p>
+<p>Example usage: <code>crysm pets-mark-dead-pixels
+--correction-factor 2.196 --central-four-factor 4.051</code></p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm pets-mark-dead-pixels [OPTIONS] IMAGE</code></p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>IMAGE</code>: Image to look at to find the dead pixels  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-d, --dead-pixels PATH</code>: PETS generated file of initial dead pixels</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="crysm-pets-create-beamstop"><code>crysm pets-create-beamstop</code></h2>
+<p>Create a beamstop</p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm pets-create-beamstop [OPTIONS] OUTPUT</code></p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>OUTPUT</code>: File to store beamstop in  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-w, --image-width INTEGER</code>: Width of image in pixels, after eventual widening of the cross  [required]</li>
+<li><code>-b, --beamstop-width INTEGER</code>: Width of beamstop in pixels  [required]</li>
+<li><code>-k, --beamstop-kind [cross|square]</code>: Type of beamstop, either "cross" or "square"  [default: cross]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="crysm-pets-solve"><code>crysm pets-solve</code></h2>
+<p>Runs SHELXT on the given project using the generated .hkl and .ins files from newest integration.
+Adds elements to .ins file and runs with the Laue group found in .pts2 file
+Any arguments can be added after the .pts2 file and will be passed on to SHELXT, overriding the defaults set by crysm:</p>
+<p><code>crysm pets-solve pets.pts2 -l4 -a&quot;0.5&quot;</code></p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm pets-solve [OPTIONS] PETS_FILE</code></p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>PETS_FILE</code>: Pets .pts2 file to read the Laue class from  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>-m, --composition TEXT</code>: Composition of substance, e.g. SiO or Si2O4. Case sensitive.  [required]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="crysm-xds-calibrate"><code>crysm xds-calibrate</code></h2>
+<p>Print lines to add to XDS.INP to correct the rotation axis and detector distance</p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm xds-calibrate [OPTIONS]</code></p>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--pixel-size FLOAT</code>: Calibrated pixel size, depends on camera length.Suggested values: 120cm -&gt; 0.00947, 150cm -&gt; 0.007929, 200cm -&gt; 0.006167  [default: 0.007929]</li>
+<li><code>--rotation-axis FLOAT</code>: Rotation axis in degrees. Default 231 degrees.  [default: 231]</li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="crysm-compare-hkl"><code>crysm compare-hkl</code></h2>
+<p>Compare the indexed reflections in SMV/INTEGRATE.HKL and pets.hkl</p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm compare-hkl [OPTIONS]</code></p>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="crysm-plot-hkl"><code>crysm plot-hkl</code></h2>
+<p>Plot the distribution of indexed peaks in a pets .hkl-file</p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm plot-hkl [OPTIONS]</code></p>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--filename PATH</code></li>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+<h2 id="crysm-plot-camel"><code>crysm plot-camel</code></h2>
+<p>Plot the rocking curve from a .cml-file</p>
+<p><strong>Usage</strong>:</p>
+<p><code>console
+$ crysm plot-camel [OPTIONS] FILENAME</code></p>
+<p><strong>Arguments</strong>:</p>
+<ul>
+<li><code>FILENAME</code>: The .cml file to plot  [required]</li>
+</ul>
+<p><strong>Options</strong>:</p>
+<ul>
+<li><code>--help</code>: Show this message and exit.</li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href=".." class="md-footer__link md-footer__link--prev" aria-label="Previous: Crysm">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Crysm
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../cred_guide.pdf" class="md-footer__link md-footer__link--next" aria-label="Next: PDF guide">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                PDF guide
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.top", "search.highlight", "search.suggest", "toc.follow"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>
