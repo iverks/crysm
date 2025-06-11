@@ -12,4 +12,5 @@ An updated version is available
 at https://github.com/TEM-Gemini-Centre/developments/blob/main/cRED/3D%20ED%20data%20processing/User%20manual%203D%20ED%20data%20processing%20NTNU.pdf.
 For access to this private repository contact Emil F. Christiansen, NTNU Department of Physics.
 For data acquisition using Instamatic at the TGS/NorTEM JEOL at NTNU, see the manual on acquisition made by Oskar Ryggetangen.
-This is also available at https://github.com/TEM-Gemini-Centre/developments. // TODO: Spesifikk lenke
+This is also available at
+https://github.com/TEM-Gemini-Centre/developments/blob/main/cRED/cRED_data_collection_manual.pdf.
